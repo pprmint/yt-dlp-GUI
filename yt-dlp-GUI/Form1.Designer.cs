@@ -52,13 +52,17 @@
             toolTipShamelessPlug = new ToolTip(components);
             toolTipUpdate = new ToolTip(components);
             toolTipVtdlpVersion = new ToolTip(components);
+            labelVideoFormat = new Label();
+            labelAudioFormat = new Label();
+            dropdownVideoResolution = new ComboBox();
+            labelVideoResolution = new Label();
             SuspendLayout();
             // 
             // labelName
             // 
             labelName.AutoSize = true;
             labelName.Font = new Font("Segoe UI Variable Display", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelName.Location = new Point(8, 9);
+            labelName.Location = new Point(6, 9);
             labelName.Margin = new Padding(0);
             labelName.Name = "labelName";
             labelName.Size = new Size(223, 32);
@@ -77,6 +81,7 @@
             linkLabelShamelessPlug.TabIndex = 10;
             linkLabelShamelessPlug.TabStop = true;
             linkLabelShamelessPlug.Text = "pprmint.art";
+            linkLabelShamelessPlug.TextAlign = ContentAlignment.TopRight;
             linkLabelShamelessPlug.VisitedLinkColor = SystemColors.ActiveCaption;
             linkLabelShamelessPlug.LinkClicked += LinkLabelShamelessPlug_LinkClicked;
             // 
@@ -112,7 +117,7 @@
             // radioButtonVideo
             // 
             radioButtonVideo.AutoSize = true;
-            radioButtonVideo.Location = new Point(11, 137);
+            radioButtonVideo.Location = new Point(11, 138);
             radioButtonVideo.Name = "radioButtonVideo";
             radioButtonVideo.Size = new Size(57, 20);
             radioButtonVideo.TabIndex = 1;
@@ -123,7 +128,7 @@
             // radioButtonAudio
             // 
             radioButtonAudio.AutoSize = true;
-            radioButtonAudio.Location = new Point(74, 137);
+            radioButtonAudio.Location = new Point(74, 138);
             radioButtonAudio.Name = "radioButtonAudio";
             radioButtonAudio.Size = new Size(83, 20);
             radioButtonAudio.TabIndex = 2;
@@ -133,17 +138,19 @@
             // 
             // dropdownVideoFormat
             // 
+            dropdownVideoFormat.DropDownStyle = ComboBoxStyle.DropDownList;
             dropdownVideoFormat.FormattingEnabled = true;
             dropdownVideoFormat.Items.AddRange(new object[] { "mp4", "gif", "mkv", "webm", "mov", "avi", "flv" });
-            dropdownVideoFormat.Location = new Point(170, 137);
+            dropdownVideoFormat.Location = new Point(297, 137);
             dropdownVideoFormat.Name = "dropdownVideoFormat";
             dropdownVideoFormat.Size = new Size(121, 24);
-            dropdownVideoFormat.TabIndex = 3;
+            dropdownVideoFormat.TabIndex = 4;
             dropdownVideoFormat.Tag = "videoFormat";
-            dropdownVideoFormat.Text = "Video format";
+            dropdownVideoFormat.Visible = false;
             // 
             // dropdownAudioFormat
             // 
+            dropdownAudioFormat.DropDownStyle = ComboBoxStyle.DropDownList;
             dropdownAudioFormat.FormattingEnabled = true;
             dropdownAudioFormat.Items.AddRange(new object[] { "mp3", "wav", "flac", "aac", "alac", "m4a", "opus", "vorbis" });
             dropdownAudioFormat.Location = new Point(297, 137);
@@ -151,7 +158,7 @@
             dropdownAudioFormat.Size = new Size(121, 24);
             dropdownAudioFormat.TabIndex = 4;
             dropdownAudioFormat.Tag = "audioFormat";
-            dropdownAudioFormat.Text = "Audio format";
+            dropdownAudioFormat.Visible = false;
             // 
             // labelOutputDir
             // 
@@ -185,9 +192,9 @@
             // buttonStartDownload
             // 
             buttonStartDownload.Enabled = false;
-            buttonStartDownload.Location = new Point(12, 242);
+            buttonStartDownload.Location = new Point(12, 244);
             buttonStartDownload.Name = "buttonStartDownload";
-            buttonStartDownload.Size = new Size(121, 26);
+            buttonStartDownload.Size = new Size(406, 26);
             buttonStartDownload.TabIndex = 7;
             buttonStartDownload.Text = "Start download";
             buttonStartDownload.UseVisualStyleBackColor = true;
@@ -196,19 +203,20 @@
             // textBoxConsoleOut
             // 
             textBoxConsoleOut.BorderStyle = BorderStyle.FixedSingle;
-            textBoxConsoleOut.Font = new Font("Cascadia Mono", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBoxConsoleOut.Location = new Point(139, 245);
+            textBoxConsoleOut.Font = new Font("Cascadia Mono", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBoxConsoleOut.Location = new Point(12, 274);
             textBoxConsoleOut.Name = "textBoxConsoleOut";
             textBoxConsoleOut.ReadOnly = true;
-            textBoxConsoleOut.Size = new Size(279, 21);
+            textBoxConsoleOut.Size = new Size(406, 20);
             textBoxConsoleOut.TabIndex = 15;
             textBoxConsoleOut.TabStop = false;
+            textBoxConsoleOut.TextAlign = HorizontalAlignment.Center;
             // 
             // labelUpdateStatus
             // 
             labelUpdateStatus.AutoSize = true;
             labelUpdateStatus.ForeColor = SystemColors.GrayText;
-            labelUpdateStatus.Location = new Point(8, 295);
+            labelUpdateStatus.Location = new Point(8, 325);
             labelUpdateStatus.Name = "labelUpdateStatus";
             labelUpdateStatus.Size = new Size(36, 16);
             labelUpdateStatus.TabIndex = 16;
@@ -226,13 +234,14 @@
             linkLabelYtdlpSource.TabIndex = 9;
             linkLabelYtdlpSource.TabStop = true;
             linkLabelYtdlpSource.Text = "yt-dlp";
+            linkLabelYtdlpSource.TextAlign = ContentAlignment.TopRight;
             linkLabelYtdlpSource.VisitedLinkColor = SystemColors.ActiveCaption;
             linkLabelYtdlpSource.LinkClicked += LinkLabelYtdlpSource_LinkClicked;
             // 
             // buttonUpdate
             // 
             buttonUpdate.Font = new Font("Segoe Fluent Icons", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonUpdate.Location = new Point(393, 286);
+            buttonUpdate.Location = new Point(393, 316);
             buttonUpdate.Name = "buttonUpdate";
             buttonUpdate.Size = new Size(25, 25);
             buttonUpdate.TabIndex = 8;
@@ -240,11 +249,58 @@
             buttonUpdate.UseVisualStyleBackColor = true;
             buttonUpdate.Click += ButtonUpdate_Click;
             // 
+            // labelVideoFormat
+            // 
+            labelVideoFormat.AutoSize = true;
+            labelVideoFormat.Location = new Point(342, 118);
+            labelVideoFormat.Margin = new Padding(0);
+            labelVideoFormat.Name = "labelVideoFormat";
+            labelVideoFormat.Size = new Size(78, 16);
+            labelVideoFormat.TabIndex = 17;
+            labelVideoFormat.Text = "Video format";
+            labelVideoFormat.TextAlign = ContentAlignment.TopRight;
+            // 
+            // labelAudioFormat
+            // 
+            labelAudioFormat.AutoSize = true;
+            labelAudioFormat.Location = new Point(342, 118);
+            labelAudioFormat.Margin = new Padding(0);
+            labelAudioFormat.Name = "labelAudioFormat";
+            labelAudioFormat.Size = new Size(78, 16);
+            labelAudioFormat.TabIndex = 18;
+            labelAudioFormat.Text = "Audio format";
+            labelAudioFormat.TextAlign = ContentAlignment.TopRight;
+            // 
+            // dropdownVideoResolution
+            // 
+            dropdownVideoResolution.DropDownStyle = ComboBoxStyle.DropDownList;
+            dropdownVideoResolution.FormattingEnabled = true;
+            dropdownVideoResolution.Items.AddRange(new object[] { "2160p", "1440p", "1080p", "720p", "480p" });
+            dropdownVideoResolution.Location = new Point(170, 137);
+            dropdownVideoResolution.Name = "dropdownVideoResolution";
+            dropdownVideoResolution.Size = new Size(121, 24);
+            dropdownVideoResolution.TabIndex = 3;
+            // 
+            // labelVideoResolution
+            // 
+            labelVideoResolution.AutoSize = true;
+            labelVideoResolution.Location = new Point(198, 118);
+            labelVideoResolution.Margin = new Padding(0);
+            labelVideoResolution.Name = "labelVideoResolution";
+            labelVideoResolution.Size = new Size(96, 16);
+            labelVideoResolution.TabIndex = 20;
+            labelVideoResolution.Text = "Video resolution";
+            labelVideoResolution.TextAlign = ContentAlignment.TopRight;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(430, 323);
+            ClientSize = new Size(430, 352);
+            Controls.Add(labelVideoResolution);
+            Controls.Add(dropdownVideoResolution);
+            Controls.Add(labelAudioFormat);
+            Controls.Add(labelVideoFormat);
             Controls.Add(buttonUpdate);
             Controls.Add(linkLabelYtdlpSource);
             Controls.Add(labelUpdateStatus);
@@ -268,6 +324,7 @@
             MaximizeBox = false;
             Name = "Form1";
             Text = "Video Downloader";
+            Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -296,5 +353,9 @@
         private ToolTip toolTipShamelessPlug;
         private ToolTip toolTipUpdate;
         private ToolTip toolTipVtdlpVersion;
+        private Label labelVideoFormat;
+        private Label labelAudioFormat;
+        private ComboBox dropdownVideoResolution;
+        private Label labelVideoResolution;
     }
 }
