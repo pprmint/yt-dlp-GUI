@@ -51,6 +51,7 @@
             toolTipYtdlp = new ToolTip(components);
             toolTipShamelessPlug = new ToolTip(components);
             toolTipUpdate = new ToolTip(components);
+            toolTipVtdlpVersion = new ToolTip(components);
             SuspendLayout();
             // 
             // labelName
@@ -183,6 +184,7 @@
             // 
             // buttonStartDownload
             // 
+            buttonStartDownload.Enabled = false;
             buttonStartDownload.Location = new Point(12, 242);
             buttonStartDownload.Name = "buttonStartDownload";
             buttonStartDownload.Size = new Size(121, 26);
@@ -229,7 +231,6 @@
             // 
             // buttonUpdate
             // 
-            buttonUpdate.Enabled = false;
             buttonUpdate.Font = new Font("Segoe Fluent Icons", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             buttonUpdate.Location = new Point(393, 286);
             buttonUpdate.Name = "buttonUpdate";
@@ -294,5 +295,6 @@
         private ToolTip toolTipYtdlp;
         private ToolTip toolTipShamelessPlug;
         private ToolTip toolTipUpdate;
+        private ToolTip toolTipVtdlpVersion;
     }
 }
