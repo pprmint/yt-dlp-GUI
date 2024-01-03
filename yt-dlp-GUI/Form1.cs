@@ -300,7 +300,7 @@ namespace yt_dlp_GUI
             if (downloadThread != null && downloadThread.IsAlive)
             {
                 // Inform about pending downloads.
-                DialogResult = MessageBox.Show("Download is still in progress. Please cancel them before closing the application.", "Download in progress", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = MessageBox.Show("Download is still in progress. Please cancel it before closing the application.", "Download in progress", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 e.Cancel = true;
             }
         }
