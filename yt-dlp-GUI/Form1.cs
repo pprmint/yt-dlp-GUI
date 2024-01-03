@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using static System.Windows.Forms.LinkLabel;
 
 namespace yt_dlp_GUI
 {
@@ -36,13 +35,9 @@ namespace yt_dlp_GUI
         // Current directory of where the GUI program is running.
         private readonly string execPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
 
-        // Set to true whenever yt-dlp is running.
-        private bool YtDlpRunning = false;
-
         // yt-dlp --version
         private void GetVersion()
         {
-            YtDlpRunning = true;
             ProcessStartInfo versionStartInfo = new()
             {
                 // Rember to put the .exe in a subdirectory to the exec path.
@@ -66,7 +61,6 @@ namespace yt_dlp_GUI
                     }
                 }
                 updateProcess.WaitForExit();
-                YtDlpRunning = false;
             };
         }
         // yt-dlp -U
@@ -85,37 +79,50 @@ namespace yt_dlp_GUI
                 CreateNoWindow = true,
             };
 
-            try
+            updateThread = new Thread(() =>
             {
-                using var updateProcess = new Process { StartInfo = updateStartInfo };
+                try
                 {
+                    updateProcess = new Process { StartInfo = updateStartInfo };
                     updateProcess.Start();
-                    Cursor = Cursors.WaitCursor;
-                    buttonUpdate.Enabled = false;
-                    buttonStartDownload.Enabled = false;
-                    YtDlpRunning = true;
 
-                    // Write console output to label in the bottom left corner.
                     using (StreamReader reader = updateProcess.StandardOutput)
                     {
                         while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
-                            labelUpdateStatus.Text = line.Truncate(59);
+                            labelUpdateStatus.Invoke((Action)(() => labelUpdateStatus.Text = line.Truncate(58)));
                             Application.DoEvents();
                         }
                     }
+
                     updateProcess.WaitForExit();
                 }
-            }
-            finally
-            {
-                YtDlpRunning = false;
-                ValidateDownloadButtonState();
-                Cursor = Cursors.Default;
-                buttonUpdate.Enabled = true;
-                Application.DoEvents();
-            }
+                finally
+                {
+                    Invoke(() =>
+                    {
+                        if (updateProcess != null && !updateProcess.HasExited)
+                        {
+                            updateProcess.Kill();
+                        }
+
+                        // Enable controls again.
+                        buttonStartDownload.Enabled = true;
+                        buttonUpdate.Enabled = true;
+
+                        Cursor = Cursors.Default;
+                    });
+                }
+            });
+
+            // Disable controls.
+            buttonStartDownload.Enabled = false;
+            buttonUpdate.Enabled = false;
+
+            Cursor = Cursors.WaitCursor;
+
+            updateThread.Start();
         }
         // Run yt-dlp updater
         private void ButtonUpdate_Click(object sender, EventArgs e)
@@ -131,7 +138,7 @@ namespace yt_dlp_GUI
                 && (radioButtonAudio.Checked || radioButtonVideo.Checked)
                 && !string.IsNullOrEmpty(textBoxOutputDir.Text);
 
-            buttonStartDownload.Enabled = fieldsFilled && !YtDlpRunning;
+            buttonStartDownload.Enabled = fieldsFilled;
         }
         // Manually force checking of form validity.
         private void UpdateDownloadButtonState(object? sender, EventArgs e)
@@ -150,7 +157,8 @@ namespace yt_dlp_GUI
                 dropdownVideoFormat.Visible = true;
                 labelAudioFormat.Visible = false;
                 dropdownAudioFormat.Visible = false;
-            } else if (radioButtonAudio.Checked)
+            }
+            else if (radioButtonAudio.Checked)
             {
                 labelVideoResolution.Visible = false;
                 dropdownVideoResolution.Visible = false;
@@ -201,39 +209,106 @@ namespace yt_dlp_GUI
                 CreateNoWindow = true,
             };
 
-            try
+            downloadThread = new Thread(() =>
             {
-                using var updateProcess = new Process { StartInfo = updateStartInfo };
+                try
                 {
-                    updateProcess.Start();
-                    Cursor = Cursors.WaitCursor;
-                    buttonUpdate.Enabled = false;
-                    buttonStartDownload.Enabled = false;
-                    YtDlpRunning = true;
+                    downloadProcess = new Process { StartInfo = updateStartInfo };
+                    downloadProcess.Start();
 
-                    // Write console output to text field next to download button.
-                    using (StreamReader reader = updateProcess.StandardOutput)
+                    using (StreamReader reader = downloadProcess.StandardOutput)
                     {
                         while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
-                            textBoxConsoleOut.Text = line;
+                            textBoxConsoleOut.Invoke((Action)(() => textBoxConsoleOut.Text = line));
                             Application.DoEvents();
+
+                            if (CancelDownloadRequested)
+                            {
+                                break;
+                            }
                         }
                     }
-                    updateProcess.WaitForExit();
+
+                    downloadProcess.WaitForExit();
                 }
-            }
-            finally
+                finally
+                {
+                    Invoke(() =>
+                    {
+                        if (downloadProcess != null && !downloadProcess.HasExited)
+                        {
+                            downloadProcess.Kill();
+                        }
+
+                        // Enable controls and hide cancel button.
+                        textBoxConsoleOut.Text = CancelDownloadRequested ? "Download canceled." : "Download completed.";
+                        CancelDownloadRequested = false;
+
+                        textBoxSourceUrl.Enabled = true;
+                        radioButtonVideo.Enabled = true;
+                        radioButtonAudio.Enabled = true;
+                        dropdownVideoFormat.Enabled = true;
+                        dropdownVideoResolution.Enabled = true;
+                        dropdownAudioFormat.Enabled = true;
+                        buttonBrowse.Enabled = true;
+                        buttonStartDownload.Visible = true;
+                        buttonCancelDownload.Visible = false;
+                        buttonUpdate.Enabled = true;
+                    });
+                }
+            });
+
+            // Disable controls and show cancel button.
+            textBoxSourceUrl.Enabled = false;
+            radioButtonVideo.Enabled = false;
+            radioButtonAudio.Enabled = false;
+            dropdownVideoFormat.Enabled = false;
+            dropdownVideoResolution.Enabled = false;
+            dropdownAudioFormat.Enabled = false;
+            buttonBrowse.Enabled = false;
+            buttonStartDownload.Visible = false;
+            buttonCancelDownload.Visible = true;
+            buttonCancelDownload.Enabled = true;
+            buttonUpdate.Enabled = false;
+
+            textBoxConsoleOut.Text = null;
+
+            downloadThread.Start();
+        }
+
+        private bool CancelDownloadRequested = false;
+
+        private void ButtonCancelDownload_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to cancel the download? You may need to clean up partially downloaded files.", "Cancel download", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            
+            if (result == DialogResult.Yes)
             {
-                YtDlpRunning = false;
-                textBoxConsoleOut.Text = "Download complete.";
-                ValidateDownloadButtonState();
-                Cursor = Cursors.Default;
-                buttonUpdate.Enabled = true;
-                Application.DoEvents();
+                // Set the flag to request cancellation.
+                CancelDownloadRequested = true;
+
+                // Disable Cancel download button.
+                buttonCancelDownload.Enabled = false;
             }
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Check if downloads are in progress.
+            if (downloadThread != null && downloadThread.IsAlive)
+            {
+                // Inform about pending downloads.
+                DialogResult = MessageBox.Show("Download is still in progress. Please cancel them before closing the application.", "Download in progress", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Cancel = true;
+            }
+        }
+
+        private Thread updateThread;
+        private Process updateProcess;
+        private Thread downloadThread;
+        private Process downloadProcess;
 
         private void LinkLabelYtdlpSource_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

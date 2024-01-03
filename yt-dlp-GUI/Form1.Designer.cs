@@ -56,6 +56,7 @@
             labelAudioFormat = new Label();
             dropdownVideoResolution = new ComboBox();
             labelVideoResolution = new Label();
+            buttonCancelDownload = new Button();
             SuspendLayout();
             // 
             // labelName
@@ -252,7 +253,7 @@
             // labelVideoFormat
             // 
             labelVideoFormat.AutoSize = true;
-            labelVideoFormat.Location = new Point(342, 118);
+            labelVideoFormat.Location = new Point(343, 118);
             labelVideoFormat.Margin = new Padding(0);
             labelVideoFormat.Name = "labelVideoFormat";
             labelVideoFormat.Size = new Size(78, 16);
@@ -263,7 +264,7 @@
             // labelAudioFormat
             // 
             labelAudioFormat.AutoSize = true;
-            labelAudioFormat.Location = new Point(342, 118);
+            labelAudioFormat.Location = new Point(343, 118);
             labelAudioFormat.Margin = new Padding(0);
             labelAudioFormat.Name = "labelAudioFormat";
             labelAudioFormat.Size = new Size(78, 16);
@@ -284,7 +285,7 @@
             // labelVideoResolution
             // 
             labelVideoResolution.AutoSize = true;
-            labelVideoResolution.Location = new Point(198, 118);
+            labelVideoResolution.Location = new Point(199, 118);
             labelVideoResolution.Margin = new Padding(0);
             labelVideoResolution.Name = "labelVideoResolution";
             labelVideoResolution.Size = new Size(96, 16);
@@ -292,11 +293,23 @@
             labelVideoResolution.Text = "Video resolution";
             labelVideoResolution.TextAlign = ContentAlignment.TopRight;
             // 
+            // buttonCancelDownload
+            // 
+            buttonCancelDownload.Location = new Point(12, 244);
+            buttonCancelDownload.Name = "buttonCancelDownload";
+            buttonCancelDownload.Size = new Size(406, 26);
+            buttonCancelDownload.TabIndex = 21;
+            buttonCancelDownload.Text = "Cancel download";
+            buttonCancelDownload.UseVisualStyleBackColor = true;
+            buttonCancelDownload.Visible = false;
+            buttonCancelDownload.Click += ButtonCancelDownload_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(430, 352);
+            Controls.Add(buttonCancelDownload);
             Controls.Add(labelVideoResolution);
             Controls.Add(dropdownVideoResolution);
             Controls.Add(labelAudioFormat);
@@ -324,6 +337,7 @@
             MaximizeBox = false;
             Name = "Form1";
             Text = "Video Downloader";
+            FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -357,5 +371,6 @@
         private Label labelAudioFormat;
         private ComboBox dropdownVideoResolution;
         private Label labelVideoResolution;
+        private Button buttonCancelDownload;
     }
 }
