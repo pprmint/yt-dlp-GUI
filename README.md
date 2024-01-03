@@ -1,5 +1,5 @@
 <p align="center">
-    <img height="120" src="/logo.png">
+    <img height="120" src="/assets/logo.png">
 </p>
 
 # yt-dlp GUI
