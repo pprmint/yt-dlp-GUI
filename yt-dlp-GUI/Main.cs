@@ -2,36 +2,34 @@ using System.Diagnostics;
 
 namespace yt_dlp_GUI
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
-        public Form1()
+        public Main()
         {
             InitializeComponent();
 
             // Define default fonts.
             Font fontRegular = new Font("Segoe UI", 9);
             Font fontDisplay = new Font("Segoe UI", 18, FontStyle.Bold);
-            Font fontIcon = new Font("Segoe MDL2 Assets", 9);
-            string updateIcon = "";
+            Font fontIconSmall = new Font("Segoe MDL2 Assets", 9);
+            Font fontIconBig = new Font("Segoe MDL2 Assets", 12);
 
             // Use Segoe UI Variable and Fluent Icons on Windows 11.
             if (Environment.OSVersion.Version.Build >= 22000)
             {
                 fontRegular = new Font("Segoe UI Variable", 9);
                 fontDisplay = new Font("Segoe UI Variable Display", 18, FontStyle.Bold);
-                fontIcon = new Font("Segoe Fluent Icons", 9);
-                updateIcon = "";
+                fontIconSmall = new Font("Segoe Fluent Icons", 9);
+                fontIconBig = new Font("Segoe Fluent Icons", 12);
             }
 
             // Set fonts.
             Font = fontRegular;
             labelName.Font = fontDisplay;
-            buttonUpdate.Font = fontIcon;
-            buttonUpdate.Text = updateIcon;
+            buttonUpdate.Font = fontIconSmall;
+            buttonAbout.Font = fontIconBig;
 
             // Set tooltips.
-            toolTipYtdlp.SetToolTip(linkLabelYtdlpSource, "Visit the yt-dlp repository on GitHub.");
-            toolTipShamelessPlug.SetToolTip(linkLabelShamelessPlug, "Visit my website.");
             toolTipVtdlpVersion.SetToolTip(labelUpdateStatus, "Installed yt-dlp version.");
             toolTipUpdate.SetToolTip(buttonUpdate, "Check for updates and install them if available.");
 
@@ -112,7 +110,7 @@ namespace yt_dlp_GUI
                         while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
-                            labelUpdateStatus.Invoke((Action)(() => labelUpdateStatus.Text = line.Truncate(58)));
+                            labelUpdateStatus.Invoke((Action)(() => labelUpdateStatus.Text = line.Truncate(59)));
                             Application.DoEvents();
                         }
                     }
@@ -304,7 +302,7 @@ namespace yt_dlp_GUI
         private void ButtonCancelDownload_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Are you sure you want to cancel the download? You may need to clean up partially downloaded files.", "Cancel download", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            
+
             if (result == DialogResult.Yes)
             {
                 // Set the flag to request cancellation.
@@ -317,6 +315,14 @@ namespace yt_dlp_GUI
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Check if update is in progress.
+            if (updateThread != null && updateThread.IsAlive)
+            {
+                // Inform about pending downloads.
+                DialogResult = MessageBox.Show("Updates are checked for or being downloaded. Please wait a moment.", "Checking for updates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Cancel = true;
+            }
+
             // Check if downloads are in progress.
             if (downloadThread != null && downloadThread.IsAlive)
             {
@@ -353,6 +359,12 @@ namespace yt_dlp_GUI
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonAbout_Click(object sender, EventArgs e)
+        {
+            About aboutWindow = new();
+            aboutWindow.Show();
         }
     }
 

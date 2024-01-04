@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yt-dlp-GUI", "yt-dlp-GUI\yt-dlp-GUI.csproj", "{8D3B588A-50BA-49AE-BD8F-2A47803B9F85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "yt-dlp-GUI", "yt-dlp-GUI\yt-dlp-GUI.csproj", "{8D3B588A-50BA-49AE-BD8F-2A47803B9F85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

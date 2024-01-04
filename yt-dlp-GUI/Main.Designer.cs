@@ -1,6 +1,6 @@
 ﻿namespace yt_dlp_GUI
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,9 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             labelName = new Label();
-            linkLabelShamelessPlug = new LinkLabel();
             labelSourceUrl = new Label();
             textBoxSourceUrl = new TextBox();
             labelDownloadType = new Label();
@@ -46,10 +45,7 @@
             folderBrowserDialog = new FolderBrowserDialog();
             textBoxConsoleOut = new TextBox();
             labelUpdateStatus = new Label();
-            linkLabelYtdlpSource = new LinkLabel();
             buttonUpdate = new Button();
-            toolTipYtdlp = new ToolTip(components);
-            toolTipShamelessPlug = new ToolTip(components);
             toolTipUpdate = new ToolTip(components);
             toolTipVtdlpVersion = new ToolTip(components);
             labelVideoFormat = new Label();
@@ -57,6 +53,7 @@
             dropdownVideoResolution = new ComboBox();
             labelVideoResolution = new Label();
             buttonCancelDownload = new Button();
+            buttonAbout = new Button();
             SuspendLayout();
             // 
             // labelName
@@ -70,26 +67,10 @@
             labelName.TabIndex = 0;
             labelName.Text = "Video Downloader";
             // 
-            // linkLabelShamelessPlug
-            // 
-            linkLabelShamelessPlug.ActiveLinkColor = SystemColors.Highlight;
-            linkLabelShamelessPlug.AutoSize = true;
-            linkLabelShamelessPlug.LinkColor = SystemColors.ActiveCaption;
-            linkLabelShamelessPlug.Location = new Point(353, 25);
-            linkLabelShamelessPlug.Margin = new Padding(0);
-            linkLabelShamelessPlug.Name = "linkLabelShamelessPlug";
-            linkLabelShamelessPlug.Size = new Size(67, 16);
-            linkLabelShamelessPlug.TabIndex = 10;
-            linkLabelShamelessPlug.TabStop = true;
-            linkLabelShamelessPlug.Text = "pprmint.art";
-            linkLabelShamelessPlug.TextAlign = ContentAlignment.TopRight;
-            linkLabelShamelessPlug.VisitedLinkColor = SystemColors.ActiveCaption;
-            linkLabelShamelessPlug.LinkClicked += LinkLabelShamelessPlug_LinkClicked;
-            // 
             // labelSourceUrl
             // 
             labelSourceUrl.AutoSize = true;
-            labelSourceUrl.Location = new Point(8, 57);
+            labelSourceUrl.Location = new Point(9, 57);
             labelSourceUrl.Margin = new Padding(0);
             labelSourceUrl.Name = "labelSourceUrl";
             labelSourceUrl.Size = new Size(69, 16);
@@ -107,7 +88,7 @@
             // labelDownloadType
             // 
             labelDownloadType.AutoSize = true;
-            labelDownloadType.Location = new Point(8, 118);
+            labelDownloadType.Location = new Point(9, 118);
             labelDownloadType.Margin = new Padding(0);
             labelDownloadType.Name = "labelDownloadType";
             labelDownloadType.Size = new Size(89, 16);
@@ -164,7 +145,7 @@
             // labelOutputDir
             // 
             labelOutputDir.AutoSize = true;
-            labelOutputDir.Location = new Point(8, 179);
+            labelOutputDir.Location = new Point(9, 179);
             labelOutputDir.Margin = new Padding(0);
             labelOutputDir.Name = "labelOutputDir";
             labelOutputDir.Size = new Size(96, 16);
@@ -223,22 +204,6 @@
             labelUpdateStatus.TabIndex = 16;
             labelUpdateStatus.Text = "penis";
             // 
-            // linkLabelYtdlpSource
-            // 
-            linkLabelYtdlpSource.ActiveLinkColor = SystemColors.Highlight;
-            linkLabelYtdlpSource.AutoSize = true;
-            linkLabelYtdlpSource.LinkColor = SystemColors.ActiveCaption;
-            linkLabelYtdlpSource.Location = new Point(381, 9);
-            linkLabelYtdlpSource.Margin = new Padding(0);
-            linkLabelYtdlpSource.Name = "linkLabelYtdlpSource";
-            linkLabelYtdlpSource.Size = new Size(39, 16);
-            linkLabelYtdlpSource.TabIndex = 9;
-            linkLabelYtdlpSource.TabStop = true;
-            linkLabelYtdlpSource.Text = "yt-dlp";
-            linkLabelYtdlpSource.TextAlign = ContentAlignment.TopRight;
-            linkLabelYtdlpSource.VisitedLinkColor = SystemColors.ActiveCaption;
-            linkLabelYtdlpSource.LinkClicked += LinkLabelYtdlpSource_LinkClicked;
-            // 
             // buttonUpdate
             // 
             buttonUpdate.Font = new Font("Segoe Fluent Icons", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -246,7 +211,7 @@
             buttonUpdate.Name = "buttonUpdate";
             buttonUpdate.Size = new Size(25, 25);
             buttonUpdate.TabIndex = 8;
-            buttonUpdate.Text = "";
+            buttonUpdate.Text = "";
             buttonUpdate.UseVisualStyleBackColor = true;
             buttonUpdate.Click += ButtonUpdate_Click;
             // 
@@ -304,18 +269,30 @@
             buttonCancelDownload.Visible = false;
             buttonCancelDownload.Click += ButtonCancelDownload_Click;
             // 
-            // Form1
+            // buttonAbout
+            // 
+            buttonAbout.Font = new Font("Segoe Fluent Icons", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            buttonAbout.Location = new Point(387, 12);
+            buttonAbout.Name = "buttonAbout";
+            buttonAbout.Padding = new Padding(5, 4, 3, 3);
+            buttonAbout.Size = new Size(31, 31);
+            buttonAbout.TabIndex = 9;
+            buttonAbout.Text = "";
+            buttonAbout.UseVisualStyleBackColor = true;
+            buttonAbout.Click += buttonAbout_Click;
+            // 
+            // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(430, 352);
+            Controls.Add(buttonAbout);
             Controls.Add(buttonCancelDownload);
             Controls.Add(labelVideoResolution);
             Controls.Add(dropdownVideoResolution);
             Controls.Add(labelAudioFormat);
             Controls.Add(labelVideoFormat);
             Controls.Add(buttonUpdate);
-            Controls.Add(linkLabelYtdlpSource);
             Controls.Add(labelUpdateStatus);
             Controls.Add(textBoxConsoleOut);
             Controls.Add(buttonStartDownload);
@@ -329,13 +306,12 @@
             Controls.Add(labelDownloadType);
             Controls.Add(textBoxSourceUrl);
             Controls.Add(labelSourceUrl);
-            Controls.Add(linkLabelShamelessPlug);
             Controls.Add(labelName);
             Font = new Font("Segoe UI Variable Small", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            Name = "Form1";
+            Name = "Main";
             Text = "Video Downloader";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
@@ -346,7 +322,6 @@
         #endregion
 
         private Label labelName;
-        private LinkLabel linkLabelShamelessPlug;
         private Label labelSourceUrl;
         private TextBox textBoxSourceUrl;
         private Label labelDownloadType;
@@ -361,10 +336,7 @@
         private FolderBrowserDialog folderBrowserDialog;
         private TextBox textBoxConsoleOut;
         private Label labelUpdateStatus;
-        private LinkLabel linkLabelYtdlpSource;
         private Button buttonUpdate;
-        private ToolTip toolTipYtdlp;
-        private ToolTip toolTipShamelessPlug;
         private ToolTip toolTipUpdate;
         private ToolTip toolTipVtdlpVersion;
         private Label labelVideoFormat;
@@ -372,5 +344,6 @@
         private ComboBox dropdownVideoResolution;
         private Label labelVideoResolution;
         private Button buttonCancelDownload;
+        private Button buttonAbout;
     }
 }
