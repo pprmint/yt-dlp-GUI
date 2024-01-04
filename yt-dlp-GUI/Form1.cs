@@ -8,6 +8,27 @@ namespace yt_dlp_GUI
         {
             InitializeComponent();
 
+            // Define default fonts.
+            Font fontRegular = new Font("Segoe UI", 9);
+            Font fontDisplay = new Font("Segoe UI", 18, FontStyle.Bold);
+            Font fontIcon = new Font("Segoe MDL2 Assets", 9);
+            string updateIcon = "";
+
+            // Use Segoe UI Variable and Fluent Icons on Windows 11.
+            if (Environment.OSVersion.Version.Build >= 22000)
+            {
+                fontRegular = new Font("Segoe UI Variable", 9);
+                fontDisplay = new Font("Segoe UI Variable Display", 18, FontStyle.Bold);
+                fontIcon = new Font("Segoe Fluent Icons", 9);
+                updateIcon = "";
+            }
+
+            // Set fonts.
+            Font = fontRegular;
+            labelName.Font = fontDisplay;
+            buttonUpdate.Font = fontIcon;
+            buttonUpdate.Text = updateIcon;
+
             // Set tooltips.
             toolTipYtdlp.SetToolTip(linkLabelYtdlpSource, "Visit the yt-dlp repository on GitHub.");
             toolTipShamelessPlug.SetToolTip(linkLabelShamelessPlug, "Visit my website.");
