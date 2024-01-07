@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
             pictureBoxFooter = new PictureBox();
             labelName = new Label();
@@ -43,6 +44,14 @@
             linkLabelFfmpegGithub = new LinkLabel();
             labelFfmpegDescription = new Label();
             labelFfmpeg = new Label();
+            linkLabelProjectWebsite = new LinkLabel();
+            toolTipGithub = new ToolTip(components);
+            toolTipProjectWebsite = new ToolTip(components);
+            toolTipYtdlpGithub = new ToolTip(components);
+            toolTipYtdlpDiscord = new ToolTip(components);
+            toolTipFfmpegGithub = new ToolTip(components);
+            toolTipFfmpegWebsite = new ToolTip(components);
+            toolTipWebsite = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)pictureBoxFooter).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLogo).BeginInit();
             SuspendLayout();
@@ -112,7 +121,7 @@
             linkLabelGithub.TabStop = true;
             linkLabelGithub.Text = "GitHub repository";
             linkLabelGithub.VisitedLinkColor = SystemColors.Highlight;
-            linkLabelGithub.LinkClicked += linkLabelGithub_LinkClicked;
+            linkLabelGithub.LinkClicked += LinkLabelGithub_LinkClicked;
             // 
             // labelYtdlp
             // 
@@ -143,18 +152,19 @@
             linkLabelYtdlpGithub.Location = new Point(9, 184);
             linkLabelYtdlpGithub.Margin = new Padding(0, 0, 3, 0);
             linkLabelYtdlpGithub.Name = "linkLabelYtdlpGithub";
-            linkLabelYtdlpGithub.Size = new Size(102, 16);
+            linkLabelYtdlpGithub.Size = new Size(45, 16);
             linkLabelYtdlpGithub.TabIndex = 9;
             linkLabelYtdlpGithub.TabStop = true;
-            linkLabelYtdlpGithub.Text = "GitHub repository";
+            linkLabelYtdlpGithub.Text = "Source";
             linkLabelYtdlpGithub.VisitedLinkColor = SystemColors.Highlight;
+            linkLabelYtdlpGithub.LinkClicked += LinkLabelYtdlpGithub_LinkClicked;
             // 
             // linkLabelYtdlpDiscord
             // 
             linkLabelYtdlpDiscord.ActiveLinkColor = SystemColors.ActiveCaption;
             linkLabelYtdlpDiscord.AutoSize = true;
             linkLabelYtdlpDiscord.LinkColor = SystemColors.HotTrack;
-            linkLabelYtdlpDiscord.Location = new Point(114, 184);
+            linkLabelYtdlpDiscord.Location = new Point(57, 184);
             linkLabelYtdlpDiscord.Margin = new Padding(0, 3, 0, 0);
             linkLabelYtdlpDiscord.Name = "linkLabelYtdlpDiscord";
             linkLabelYtdlpDiscord.Size = new Size(84, 16);
@@ -162,21 +172,22 @@
             linkLabelYtdlpDiscord.TabStop = true;
             linkLabelYtdlpDiscord.Text = "Discord server";
             linkLabelYtdlpDiscord.VisitedLinkColor = SystemColors.Highlight;
+            linkLabelYtdlpDiscord.LinkClicked += LinkLabelYtdlpDiscord_LinkClicked;
             // 
             // linkLabelFfmpegWebsite
             // 
             linkLabelFfmpegWebsite.ActiveLinkColor = SystemColors.ActiveCaption;
             linkLabelFfmpegWebsite.AutoSize = true;
             linkLabelFfmpegWebsite.LinkColor = SystemColors.HotTrack;
-            linkLabelFfmpegWebsite.Location = new Point(114, 264);
+            linkLabelFfmpegWebsite.Location = new Point(57, 264);
             linkLabelFfmpegWebsite.Margin = new Padding(0, 3, 0, 0);
             linkLabelFfmpegWebsite.Name = "linkLabelFfmpegWebsite";
-            linkLabelFfmpegWebsite.Size = new Size(51, 16);
+            linkLabelFfmpegWebsite.Size = new Size(90, 16);
             linkLabelFfmpegWebsite.TabIndex = 14;
             linkLabelFfmpegWebsite.TabStop = true;
-            linkLabelFfmpegWebsite.Text = "Website";
+            linkLabelFfmpegWebsite.Text = "Project website";
             linkLabelFfmpegWebsite.VisitedLinkColor = SystemColors.Highlight;
-            linkLabelFfmpegWebsite.LinkClicked += linkLabelFfmpegWebsite_LinkClicked;
+            linkLabelFfmpegWebsite.LinkClicked += LinkLabelFfmpegWebsite_LinkClicked;
             // 
             // linkLabelFfmpegGithub
             // 
@@ -186,12 +197,12 @@
             linkLabelFfmpegGithub.Location = new Point(9, 264);
             linkLabelFfmpegGithub.Margin = new Padding(0, 0, 3, 0);
             linkLabelFfmpegGithub.Name = "linkLabelFfmpegGithub";
-            linkLabelFfmpegGithub.Size = new Size(102, 16);
+            linkLabelFfmpegGithub.Size = new Size(45, 16);
             linkLabelFfmpegGithub.TabIndex = 13;
             linkLabelFfmpegGithub.TabStop = true;
-            linkLabelFfmpegGithub.Text = "GitHub repository";
+            linkLabelFfmpegGithub.Text = "Source";
             linkLabelFfmpegGithub.VisitedLinkColor = SystemColors.Highlight;
-            linkLabelFfmpegGithub.LinkClicked += linkLabelFfmpegGithub_LinkClicked;
+            linkLabelFfmpegGithub.LinkClicked += LinkLabelFfmpegGithub_LinkClicked;
             // 
             // labelFfmpegDescription
             // 
@@ -199,9 +210,9 @@
             labelFfmpegDescription.Location = new Point(9, 245);
             labelFfmpegDescription.Margin = new Padding(0, 0, 0, 3);
             labelFfmpegDescription.Name = "labelFfmpegDescription";
-            labelFfmpegDescription.Size = new Size(206, 16);
+            labelFfmpegDescription.Size = new Size(254, 16);
             labelFfmpegDescription.TabIndex = 12;
-            labelFfmpegDescription.Text = "FFmpeg Windows binaries by GyanD.";
+            labelFfmpegDescription.Text = "FFmpeg builds for yt-dlp with various patches.";
             // 
             // labelFfmpeg
             // 
@@ -210,15 +221,31 @@
             labelFfmpeg.Location = new Point(9, 218);
             labelFfmpeg.Margin = new Padding(0, 18, 0, 6);
             labelFfmpeg.Name = "labelFfmpeg";
-            labelFfmpeg.Size = new Size(122, 21);
+            labelFfmpeg.Size = new Size(70, 21);
             labelFfmpeg.TabIndex = 11;
-            labelFfmpeg.Text = "Codex FFmpeg";
+            labelFfmpeg.Text = "FFmpeg";
+            // 
+            // linkLabelProjectWebsite
+            // 
+            linkLabelProjectWebsite.ActiveLinkColor = SystemColors.ActiveCaption;
+            linkLabelProjectWebsite.AutoSize = true;
+            linkLabelProjectWebsite.LinkColor = SystemColors.HotTrack;
+            linkLabelProjectWebsite.Location = new Point(111, 69);
+            linkLabelProjectWebsite.Margin = new Padding(0);
+            linkLabelProjectWebsite.Name = "linkLabelProjectWebsite";
+            linkLabelProjectWebsite.Size = new Size(90, 16);
+            linkLabelProjectWebsite.TabIndex = 15;
+            linkLabelProjectWebsite.TabStop = true;
+            linkLabelProjectWebsite.Text = "Project website";
+            linkLabelProjectWebsite.VisitedLinkColor = SystemColors.Highlight;
+            linkLabelProjectWebsite.LinkClicked += LinkLabelProjectWebsite_LinkClicked;
             // 
             // About
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(430, 375);
+            Controls.Add(linkLabelProjectWebsite);
             Controls.Add(linkLabelFfmpegWebsite);
             Controls.Add(linkLabelFfmpegGithub);
             Controls.Add(labelFfmpegDescription);
@@ -264,5 +291,13 @@
         private LinkLabel linkLabelFfmpegGithub;
         private Label labelFfmpegDescription;
         private Label labelFfmpeg;
+        private LinkLabel linkLabelProjectWebsite;
+        private ToolTip toolTipGithub;
+        private ToolTip toolTipProjectWebsite;
+        private ToolTip toolTipYtdlpGithub;
+        private ToolTip toolTipYtdlpDiscord;
+        private ToolTip toolTipFfmpegGithub;
+        private ToolTip toolTipFfmpegWebsite;
+        private ToolTip toolTipWebsite;
     }
 }

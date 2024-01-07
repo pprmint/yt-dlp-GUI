@@ -52,8 +52,9 @@
             labelAudioFormat = new Label();
             dropdownVideoResolution = new ComboBox();
             labelVideoResolution = new Label();
-            buttonCancelDownload = new Button();
+            buttonAbortDownload = new Button();
             buttonAbout = new Button();
+            toolTipAbout = new ToolTip(components);
             SuspendLayout();
             // 
             // labelName
@@ -63,9 +64,9 @@
             labelName.Location = new Point(6, 9);
             labelName.Margin = new Padding(0);
             labelName.Name = "labelName";
-            labelName.Size = new Size(223, 32);
+            labelName.Size = new Size(252, 32);
             labelName.TabIndex = 0;
-            labelName.Text = "Video Downloader";
+            labelName.Text = "Let's download stuff.";
             // 
             // labelSourceUrl
             // 
@@ -122,7 +123,7 @@
             // 
             dropdownVideoFormat.DropDownStyle = ComboBoxStyle.DropDownList;
             dropdownVideoFormat.FormattingEnabled = true;
-            dropdownVideoFormat.Items.AddRange(new object[] { "mp4", "gif", "mkv", "webm", "mov", "avi", "flv" });
+            dropdownVideoFormat.Items.AddRange(new object[] { "mp4", "mkv", "webm", "mov", "avi", "flv" });
             dropdownVideoFormat.Location = new Point(297, 137);
             dropdownVideoFormat.Name = "dropdownVideoFormat";
             dropdownVideoFormat.Size = new Size(121, 24);
@@ -163,9 +164,9 @@
             // 
             // buttonBrowse
             // 
-            buttonBrowse.Location = new Point(297, 196);
+            buttonBrowse.Location = new Point(298, 196);
             buttonBrowse.Name = "buttonBrowse";
-            buttonBrowse.Size = new Size(121, 26);
+            buttonBrowse.Size = new Size(121, 27);
             buttonBrowse.TabIndex = 6;
             buttonBrowse.Text = "Browse...";
             buttonBrowse.UseVisualStyleBackColor = true;
@@ -176,7 +177,7 @@
             buttonStartDownload.Enabled = false;
             buttonStartDownload.Location = new Point(12, 244);
             buttonStartDownload.Name = "buttonStartDownload";
-            buttonStartDownload.Size = new Size(406, 26);
+            buttonStartDownload.Size = new Size(406, 27);
             buttonStartDownload.TabIndex = 7;
             buttonStartDownload.Text = "Start download";
             buttonStartDownload.UseVisualStyleBackColor = true;
@@ -186,7 +187,7 @@
             // 
             textBoxConsoleOut.BorderStyle = BorderStyle.FixedSingle;
             textBoxConsoleOut.Font = new Font("Cascadia Mono", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBoxConsoleOut.Location = new Point(12, 274);
+            textBoxConsoleOut.Location = new Point(12, 277);
             textBoxConsoleOut.Name = "textBoxConsoleOut";
             textBoxConsoleOut.ReadOnly = true;
             textBoxConsoleOut.Size = new Size(406, 20);
@@ -207,9 +208,10 @@
             // buttonUpdate
             // 
             buttonUpdate.Font = new Font("Segoe Fluent Icons", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonUpdate.Location = new Point(393, 316);
+            buttonUpdate.Location = new Point(392, 314);
             buttonUpdate.Name = "buttonUpdate";
-            buttonUpdate.Size = new Size(25, 25);
+            buttonUpdate.Padding = new Padding(1, 1, 0, 0);
+            buttonUpdate.Size = new Size(26, 26);
             buttonUpdate.TabIndex = 8;
             buttonUpdate.Text = "";
             buttonUpdate.UseVisualStyleBackColor = true;
@@ -258,16 +260,16 @@
             labelVideoResolution.Text = "Video resolution";
             labelVideoResolution.TextAlign = ContentAlignment.TopRight;
             // 
-            // buttonCancelDownload
+            // buttonAbortDownload
             // 
-            buttonCancelDownload.Location = new Point(12, 244);
-            buttonCancelDownload.Name = "buttonCancelDownload";
-            buttonCancelDownload.Size = new Size(406, 26);
-            buttonCancelDownload.TabIndex = 21;
-            buttonCancelDownload.Text = "Cancel download";
-            buttonCancelDownload.UseVisualStyleBackColor = true;
-            buttonCancelDownload.Visible = false;
-            buttonCancelDownload.Click += ButtonCancelDownload_Click;
+            buttonAbortDownload.Location = new Point(12, 244);
+            buttonAbortDownload.Name = "buttonAbortDownload";
+            buttonAbortDownload.Size = new Size(406, 27);
+            buttonAbortDownload.TabIndex = 21;
+            buttonAbortDownload.Text = "Abort download";
+            buttonAbortDownload.UseVisualStyleBackColor = true;
+            buttonAbortDownload.Visible = false;
+            buttonAbortDownload.Click += ButtonAbortDownload_Click;
             // 
             // buttonAbout
             // 
@@ -279,7 +281,7 @@
             buttonAbout.TabIndex = 9;
             buttonAbout.Text = "";
             buttonAbout.UseVisualStyleBackColor = true;
-            buttonAbout.Click += buttonAbout_Click;
+            buttonAbout.Click += ButtonAbout_Click;
             // 
             // Main
             // 
@@ -287,19 +289,15 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(430, 352);
             Controls.Add(buttonAbout);
-            Controls.Add(buttonCancelDownload);
             Controls.Add(labelVideoResolution);
             Controls.Add(dropdownVideoResolution);
-            Controls.Add(labelAudioFormat);
             Controls.Add(labelVideoFormat);
             Controls.Add(buttonUpdate);
             Controls.Add(labelUpdateStatus);
             Controls.Add(textBoxConsoleOut);
-            Controls.Add(buttonStartDownload);
             Controls.Add(buttonBrowse);
             Controls.Add(textBoxOutputDir);
             Controls.Add(labelOutputDir);
-            Controls.Add(dropdownAudioFormat);
             Controls.Add(dropdownVideoFormat);
             Controls.Add(radioButtonAudio);
             Controls.Add(radioButtonVideo);
@@ -307,12 +305,16 @@
             Controls.Add(textBoxSourceUrl);
             Controls.Add(labelSourceUrl);
             Controls.Add(labelName);
+            Controls.Add(dropdownAudioFormat);
+            Controls.Add(labelAudioFormat);
+            Controls.Add(buttonStartDownload);
+            Controls.Add(buttonAbortDownload);
             Font = new Font("Segoe UI Variable Small", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Main";
-            Text = "Video Downloader";
+            Text = "yt-dlp GUI";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             ResumeLayout(false);
@@ -343,7 +345,8 @@
         private Label labelAudioFormat;
         private ComboBox dropdownVideoResolution;
         private Label labelVideoResolution;
-        private Button buttonCancelDownload;
+        private Button buttonAbortDownload;
         private Button buttonAbout;
+        private ToolTip toolTipAbout;
     }
 }

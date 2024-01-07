@@ -1,26 +1,98 @@
+using Microsoft.Win32;
 using System.Diagnostics;
+using System.Media;
 
 namespace yt_dlp_GUI
 {
     public partial class Main : Form
     {
+        // Required files and paths to run this.
+        private readonly string utilsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils");
+        private readonly string ytdlpExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils", "yt-dlp.exe");
+        private readonly string ffmpegExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils", "ffmpeg.exe");
+        private readonly string ffprobeExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils", "ffprobe.exe");
+
+        // Update and download threads.
+        private Thread? updateThread;
+        private Process? updateProcess;
+        private Thread? downloadThread;
+        private Process? downloadProcess;
+
+        // ::::::::::::::::::::::::: START
+        // Functions for changing top text
+        private void SetGreeting()
+        {
+            string[] Greetings = ["Welcome.", "Hiya.", "Good today.", "Hello there.", "Moin.", "Hola.", "Greetings.", "Let's download stuff."];
+            Random randomInt = new();
+            labelName.Text = Greetings[randomInt.Next(Greetings.Length)];
+        }
+        private void SetActivity(string text)
+        {
+            labelName.Text = string.Concat(text);
+        }
+        // ::::::::::::::::::::::::::: END
+
+        // Play Windows notification sound, because System.Media.SystemSounds is really limited.
+        public static void PlayNotificationSound()
+        {
+            try
+            {
+                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"AppEvents\Schemes\Apps\.Default\Notification.IM\.Current");
+                if (key != null)
+                {
+                    string? soundPath = key.GetValue(null) as string;
+                    if (!string.IsNullOrEmpty(soundPath))
+                    {
+                        new SoundPlayer(soundPath).Play();
+                        return;
+                    }
+                }
+            }
+            catch
+            { SystemSounds.Beep.Play(); }
+        }
+
         public Main()
         {
+            // Check for existence of utils folder and yt-dlp + FFmpeg inside it.
+            if (!Directory.Exists(utilsFolder))
+            {
+                MessageBox.Show(string.Concat("The following directory was not found:\n\n", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils"), "\n\nTry reinstalling the program."), "Error: utils not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
+            if (!File.Exists(ytdlpExe))
+            {
+                MessageBox.Show(string.Concat("The yt-dlp.exe was not found in the following directory:\n\n", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils"), "\n\nReinstall the program or download the file manually from:\n\nhttps://github.com/yt-dlp/yt-dlp#installation"), "Error: yt-dlp.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(2);
+            }
+            if (!File.Exists(ffmpegExe))
+            {
+                MessageBox.Show(string.Concat("The ffmpeg.exe was not found in the following directory:\n\n", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils"), "\n\nReinstall the program or download the essentials package from:\n\nhttps://www.gyan.dev/ffmpeg/builds/\n\nYou can find ffmpeg.exe in the 'bin' folder."), "Error: ffmpeg.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(3);
+            }
+            if (!File.Exists(ffprobeExe))
+            {
+                MessageBox.Show(string.Concat("The ffprobe.exe was not found in the following directory:\n\n", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils"), "\n\nReinstall the program or download the essentials package from:\n\nhttps://www.gyan.dev/ffmpeg/builds/\n\nYou can find ffprobe.exe in the 'bin' folder."), "Error: ffprobe.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(4);
+            }
+
             InitializeComponent();
 
+            SetGreeting();
+
             // Define default fonts.
-            Font fontRegular = new Font("Segoe UI", 9);
-            Font fontDisplay = new Font("Segoe UI", 18, FontStyle.Bold);
-            Font fontIconSmall = new Font("Segoe MDL2 Assets", 9);
-            Font fontIconBig = new Font("Segoe MDL2 Assets", 12);
+            Font fontRegular = new("Segoe UI", 8);
+            Font fontDisplay = new("Segoe UI", 18, FontStyle.Bold);
+            Font fontIconSmall = new("Segoe MDL2 Assets", 8);
+            Font fontIconBig = new("Segoe MDL2 Assets", 12);
 
             // Use Segoe UI Variable and Fluent Icons on Windows 11.
             if (Environment.OSVersion.Version.Build >= 22000)
             {
-                fontRegular = new Font("Segoe UI Variable", 9);
-                fontDisplay = new Font("Segoe UI Variable Display", 18, FontStyle.Bold);
-                fontIconSmall = new Font("Segoe Fluent Icons", 9);
-                fontIconBig = new Font("Segoe Fluent Icons", 12);
+                fontRegular = new("Segoe UI Variable Small", 9);
+                fontDisplay = new("Segoe UI Variable Display", 18, FontStyle.Bold);
+                fontIconSmall = new("Segoe Fluent Icons", 9);
+                fontIconBig = new("Segoe Fluent Icons", 12);
             }
 
             // Set fonts.
@@ -32,6 +104,7 @@ namespace yt_dlp_GUI
             // Set tooltips.
             toolTipVtdlpVersion.SetToolTip(labelUpdateStatus, "Installed yt-dlp version.");
             toolTipUpdate.SetToolTip(buttonUpdate, "Check for updates and install them if available.");
+            toolTipAbout.SetToolTip(buttonAbout, "View version information and credits to libraries.");
 
             // Set default values.
             dropdownVideoFormat.SelectedIndex = 0;
@@ -51,16 +124,15 @@ namespace yt_dlp_GUI
             textBoxOutputDir.TextChanged += UpdateDownloadButtonState;
         }
 
-        // Current directory of where the GUI program is running.
-        private readonly string execPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
-
+        // ::::::::::::::: START
+        // Get version + Updater
         // yt-dlp --version
         private void GetVersion()
         {
             ProcessStartInfo versionStartInfo = new()
             {
                 // Rember to put the .exe in a subdirectory to the exec path.
-                FileName = "C:\\ProgramData\\chocolatey\\bin\\yt-dlp.exe",
+                FileName = ytdlpExe,
                 Arguments = "--version",
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
@@ -86,12 +158,12 @@ namespace yt_dlp_GUI
         private void InstallUpdates()
         {
             labelUpdateStatus.Text = "Checking for updates...";
+            SetActivity("Updating...");
             Application.DoEvents();
 
             ProcessStartInfo updateStartInfo = new()
             {
-                // Rember to put the .exe in a subdirectory to the exec path.
-                FileName = "C:\\ProgramData\\chocolatey\\bin\\yt-dlp.exe",
+                FileName = ytdlpExe,
                 Arguments = "-U",
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
@@ -126,9 +198,11 @@ namespace yt_dlp_GUI
                             updateProcess.Kill();
                         }
 
+                        SetActivity("Update complete.");
+
                         // Enable controls again.
-                        buttonStartDownload.Enabled = true;
                         buttonUpdate.Enabled = true;
+                        ValidateDownloadButtonState();
 
                         Cursor = Cursors.Default;
                     });
@@ -148,7 +222,18 @@ namespace yt_dlp_GUI
         {
             InstallUpdates();
         }
+        // ::::::::::::::::: END
 
+        // About (i) button.
+        private void ButtonAbout_Click(object sender, EventArgs e)
+        {
+            About aboutWindow = new();
+            aboutWindow.Show();
+        }
+
+        // ::::: START
+        // Validations
+        // Download
         // Check whether form field entries are valid and enable Start download button if so.
         private void ValidateDownloadButtonState()
         {
@@ -164,7 +249,7 @@ namespace yt_dlp_GUI
         {
             ValidateDownloadButtonState();
         }
-
+        // Formats
         // Toggle visibilty of format dropdowns depending on whether to download video or audio.
         private void ValidateFormatState()
         {
@@ -192,6 +277,7 @@ namespace yt_dlp_GUI
         {
             ValidateFormatState();
         }
+        // ::::::: END
 
         // Set directory where files should be downloaded to.
         private void ChooseOutputDir()
@@ -206,6 +292,7 @@ namespace yt_dlp_GUI
             ChooseOutputDir();
         }
 
+        // Handle download start and abort.
         private void ButtonStartDownload_Click(object sender, EventArgs e)
         {
             string sourceUrl = textBoxSourceUrl.Text;
@@ -214,15 +301,15 @@ namespace yt_dlp_GUI
             string videoResolution = dropdownVideoResolution.Text.TrimEnd('p');
             string audioFormat = dropdownAudioFormat.Text;
 
+            SetActivity("Downloading...");
             Application.DoEvents();
 
-            ProcessStartInfo updateStartInfo = new()
+            ProcessStartInfo downloadStartInfo = new()
             {
-                // Rember to put the .exe in a subdirectory to the exec path.
-                FileName = "C:\\ProgramData\\chocolatey\\bin\\yt-dlp.exe",
+                FileName = ytdlpExe,
                 Arguments = radioButtonVideo.Checked
-                    ? string.Concat(sourceUrl, " -P ", outputDir, " -f bv*[ext=", videoFormat, "][height<=", videoResolution, "]+ba/b[ext=", videoFormat, "][height<=", videoResolution, "] / bv*+ba/b")
-                    : string.Concat(sourceUrl, " -P ", outputDir, " -x --audio-format ", audioFormat, " --ffmpeg-location C:\\ProgramData\\chocolatey\\bin\\ffmpeg.exe"),
+                    ? string.Concat(sourceUrl, " -P ", outputDir, " -f \"bv*[height<=", videoResolution, "]+ba[ext=m4a]/b[height<=", videoResolution, "] / bv*+ba/b\" --ffmpeg-location ", ffmpegExe, " --merge-output-format ", videoFormat)
+                    : string.Concat(sourceUrl, " -P ", outputDir, " -x --audio-format ", audioFormat, " --ffmpeg-location ", ffmpegExe),
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
@@ -232,7 +319,7 @@ namespace yt_dlp_GUI
             {
                 try
                 {
-                    downloadProcess = new Process { StartInfo = updateStartInfo };
+                    downloadProcess = new Process { StartInfo = downloadStartInfo };
                     downloadProcess.Start();
 
                     using (StreamReader reader = downloadProcess.StandardOutput)
@@ -243,13 +330,13 @@ namespace yt_dlp_GUI
                             textBoxConsoleOut.Invoke((Action)(() => textBoxConsoleOut.Text = line));
                             Application.DoEvents();
 
-                            if (CancelDownloadRequested)
+                            if (AbortDownloadRequested)
                             {
                                 break;
                             }
                         }
-                    }
 
+                    }
                     downloadProcess.WaitForExit();
                 }
                 finally
@@ -261,10 +348,22 @@ namespace yt_dlp_GUI
                             downloadProcess.Kill();
                         }
 
-                        // Enable controls and hide cancel button.
-                        textBoxConsoleOut.Text = CancelDownloadRequested ? "Download canceled." : "Download completed.";
-                        CancelDownloadRequested = false;
+                        // Enable controls and hide abort button.
+                        if (AbortDownloadRequested)
+                        {
+                            SetActivity("Download aborted.");
+                        }
+                        else
+                        {
+                            SetActivity("Download complete.");
+                            PlayNotificationSound();
 
+                        }
+                        AbortDownloadRequested = false;
+                        buttonAbortDownload.Visible = false;
+
+                        //Re-enable controls.
+                        buttonStartDownload.Visible = true;
                         textBoxSourceUrl.Enabled = true;
                         radioButtonVideo.Enabled = true;
                         radioButtonAudio.Enabled = true;
@@ -272,14 +371,12 @@ namespace yt_dlp_GUI
                         dropdownVideoResolution.Enabled = true;
                         dropdownAudioFormat.Enabled = true;
                         buttonBrowse.Enabled = true;
-                        buttonStartDownload.Visible = true;
-                        buttonCancelDownload.Visible = false;
                         buttonUpdate.Enabled = true;
                     });
                 }
             });
 
-            // Disable controls and show cancel button.
+            // Disable controls and show abort button.
             textBoxSourceUrl.Enabled = false;
             radioButtonVideo.Enabled = false;
             radioButtonAudio.Enabled = false;
@@ -288,38 +385,36 @@ namespace yt_dlp_GUI
             dropdownAudioFormat.Enabled = false;
             buttonBrowse.Enabled = false;
             buttonStartDownload.Visible = false;
-            buttonCancelDownload.Visible = true;
-            buttonCancelDownload.Enabled = true;
+            buttonAbortDownload.Visible = true;
+            buttonAbortDownload.Enabled = true;
             buttonUpdate.Enabled = false;
-
-            textBoxConsoleOut.Text = null;
 
             downloadThread.Start();
         }
-
-        private bool CancelDownloadRequested = false;
-
-        private void ButtonCancelDownload_Click(object sender, EventArgs e)
+        // If true, current download will be aborted. Reset to false when new download starts.
+        private bool AbortDownloadRequested = false;
+        private void ButtonAbortDownload_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to cancel the download? You may need to clean up partially downloaded files.", "Cancel download", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult result = MessageBox.Show("Are you sure you want to abort the download? You may need to clean up partially downloaded files.", "Abort download", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
-                // Set the flag to request cancellation.
-                CancelDownloadRequested = true;
+                // Set the flag to request abortlation.
+                AbortDownloadRequested = true;
 
-                // Disable Cancel download button.
-                buttonCancelDownload.Enabled = false;
+                // Disable Abort download button.
+                buttonAbortDownload.Enabled = false;
             }
         }
 
+        // Checks for ongoing activity while trying to close the program.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Check if update is in progress.
             if (updateThread != null && updateThread.IsAlive)
             {
                 // Inform about pending downloads.
-                DialogResult = MessageBox.Show("Updates are checked for or being downloaded. Please wait a moment.", "Checking for updates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = MessageBox.Show("Update is still in progress. Please wait a few seconds before closing the application.", "Still updating", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 e.Cancel = true;
             }
 
@@ -327,44 +422,14 @@ namespace yt_dlp_GUI
             if (downloadThread != null && downloadThread.IsAlive)
             {
                 // Inform about pending downloads.
-                DialogResult = MessageBox.Show("Download is still in progress. Please cancel it before closing the application.", "Download in progress", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = MessageBox.Show("Download is still in progress. Please abort it before closing the application.", "Still downloading", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 e.Cancel = true;
             }
-        }
-
-        private Thread updateThread;
-        private Process updateProcess;
-        private Thread downloadThread;
-        private Process downloadProcess;
-
-        private void LinkLabelYtdlpSource_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            ProcessStartInfo githubUrl = new()
-            {
-                FileName = "https://github.com/yt-dlp/yt-dlp",
-                UseShellExecute = true
-            };
-            Process.Start(githubUrl);
-        }
-        private void LinkLabelShamelessPlug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            ProcessStartInfo websiteUrl = new()
-            {
-                FileName = "https://pprmint.art",
-                UseShellExecute = true
-            };
-            Process.Start(websiteUrl);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
 
-        }
-
-        private void buttonAbout_Click(object sender, EventArgs e)
-        {
-            About aboutWindow = new();
-            aboutWindow.Show();
         }
     }
 
