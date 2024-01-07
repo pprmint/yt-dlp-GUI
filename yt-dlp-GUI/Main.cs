@@ -7,12 +7,14 @@ namespace yt_dlp_GUI
     public partial class Main : Form
     {
         // Required files and paths to run this.
-        private readonly string utilsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils");
-        private readonly string ytdlpExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils", "yt-dlp.exe");
-        private readonly string ffmpegExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils", "ffmpeg.exe");
-        private readonly string ffprobeExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils", "ffprobe.exe");
+        private readonly string utilsFolder = Path.Combine(Directory.GetCurrentDirectory(), "utils");
+        private readonly string ytdlpExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "yt-dlp.exe");
+        private readonly string ffmpegExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "ffmpeg.exe");
+        private readonly string ffprobeExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "ffprobe.exe");
 
         // Update and download threads.
+        private Thread? versionThread;
+        private Process? versionProcess;
         private Thread? updateThread;
         private Process? updateProcess;
         private Thread? downloadThread;
@@ -57,22 +59,22 @@ namespace yt_dlp_GUI
             // Check for existence of utils folder and yt-dlp + FFmpeg inside it.
             if (!Directory.Exists(utilsFolder))
             {
-                MessageBox.Show(string.Concat("The following directory was not found:\n\n", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils"), "\n\nTry reinstalling the program."), "Error: utils not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Concat("The following directory was not found:\n\n", Path.Combine(System.IO.Directory.GetCurrentDirectory(), "utils"), "\n\nTry reinstalling the program."), "Error: utils not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
             }
             if (!File.Exists(ytdlpExe))
             {
-                MessageBox.Show(string.Concat("The yt-dlp.exe was not found in the following directory:\n\n", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils"), "\n\nReinstall the program or download the file manually from:\n\nhttps://github.com/yt-dlp/yt-dlp#installation"), "Error: yt-dlp.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Concat("The yt-dlp.exe was not found in the following directory:\n\n", Path.Combine(System.IO.Directory.GetCurrentDirectory(), "utils"), "\n\nReinstall the program or download the file manually from:\n\nhttps://github.com/yt-dlp/yt-dlp#installation"), "Error: yt-dlp.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(2);
             }
             if (!File.Exists(ffmpegExe))
             {
-                MessageBox.Show(string.Concat("The ffmpeg.exe was not found in the following directory:\n\n", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils"), "\n\nReinstall the program or download the essentials package from:\n\nhttps://www.gyan.dev/ffmpeg/builds/\n\nYou can find ffmpeg.exe in the 'bin' folder."), "Error: ffmpeg.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Concat("The ffmpeg.exe was not found in the following directory:\n\n", Path.Combine(System.IO.Directory.GetCurrentDirectory(), "utils"), "\n\nReinstall the program or download the essentials package from:\n\nhttps://www.gyan.dev/ffmpeg/builds/\n\nYou can find ffmpeg.exe in the 'bin' folder."), "Error: ffmpeg.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(3);
             }
             if (!File.Exists(ffprobeExe))
             {
-                MessageBox.Show(string.Concat("The ffprobe.exe was not found in the following directory:\n\n", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "utils"), "\n\nReinstall the program or download the essentials package from:\n\nhttps://www.gyan.dev/ffmpeg/builds/\n\nYou can find ffprobe.exe in the 'bin' folder."), "Error: ffprobe.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Concat("The ffprobe.exe was not found in the following directory:\n\n", Path.Combine(System.IO.Directory.GetCurrentDirectory(), "utils"), "\n\nReinstall the program or download the essentials package from:\n\nhttps://www.gyan.dev/ffmpeg/builds/\n\nYou can find ffprobe.exe in the 'bin' folder."), "Error: ffprobe.exe not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(4);
             }
 
@@ -131,7 +133,6 @@ namespace yt_dlp_GUI
         {
             ProcessStartInfo versionStartInfo = new()
             {
-                // Rember to put the .exe in a subdirectory to the exec path.
                 FileName = ytdlpExe,
                 Arguments = "--version",
                 RedirectStandardOutput = true,
@@ -139,20 +140,29 @@ namespace yt_dlp_GUI
                 CreateNoWindow = true,
             };
 
-            using var updateProcess = new Process { StartInfo = versionStartInfo };
+            versionThread = new Thread(() =>
             {
-                updateProcess.Start();
-                // Write console output to label in the bottom left corner.
-                using (StreamReader reader = updateProcess.StandardOutput)
+                try
                 {
-                    while (!reader.EndOfStream)
+                    versionProcess = new Process { StartInfo = versionStartInfo };
+                    versionProcess.Start();
+
+                    // Write console output to label in the bottom left corner.
+                    using (StreamReader reader = versionProcess.StandardOutput)
                     {
-                        var line = reader.ReadLine();
-                        labelUpdateStatus.Text = "yt-dlp " + line;
+                        while (!reader.EndOfStream)
+                        {
+                            var line = reader.ReadLine();
+                            labelUpdateStatus.Invoke((Action)(() => labelUpdateStatus.Text = "yt-dlp " + line));
+                        }
                     }
+
+                    versionProcess.WaitForExit();
                 }
-                updateProcess.WaitForExit();
-            };
+                finally { }
+            });
+
+            versionThread.Start();
         }
         // yt-dlp -U
         private void InstallUpdates()
@@ -308,7 +318,7 @@ namespace yt_dlp_GUI
             {
                 FileName = ytdlpExe,
                 Arguments = radioButtonVideo.Checked
-                    ? string.Concat(sourceUrl, " -P ", outputDir, " -f \"bv*[height<=", videoResolution, "]+ba[ext=m4a]/b[height<=", videoResolution, "] / bv*+ba/b\" --ffmpeg-location ", ffmpegExe, " --merge-output-format ", videoFormat)
+                    ? string.Concat(sourceUrl, " -P ", outputDir, " -f \"bv*[height<=", videoResolution, "]+ba/b[height<=", videoResolution, "] / bv*+ba/b\" --ffmpeg-location \"", ffmpegExe, "\" --merge-output-format ", videoFormat)
                     : string.Concat(sourceUrl, " -P ", outputDir, " -x --audio-format ", audioFormat, " --ffmpeg-location ", ffmpegExe),
                 RedirectStandardOutput = true,
                 UseShellExecute = false,

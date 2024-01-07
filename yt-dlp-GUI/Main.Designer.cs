@@ -201,9 +201,8 @@
             labelUpdateStatus.ForeColor = SystemColors.GrayText;
             labelUpdateStatus.Location = new Point(8, 325);
             labelUpdateStatus.Name = "labelUpdateStatus";
-            labelUpdateStatus.Size = new Size(36, 16);
+            labelUpdateStatus.Size = new Size(0, 16);
             labelUpdateStatus.TabIndex = 16;
-            labelUpdateStatus.Text = "penis";
             // 
             // buttonUpdate
             // 
