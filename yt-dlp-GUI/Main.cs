@@ -318,7 +318,7 @@ namespace yt_dlp_GUI
             {
                 FileName = ytdlpExe,
                 Arguments = radioButtonVideo.Checked
-                    ? string.Concat(sourceUrl, " -P ", outputDir, " -f \"bv*[height<=", videoResolution, "]+ba[ext=m4a]/b[height<=", videoResolution, "] / bv*+ba/b\" --ffmpeg-location \"", ffmpegExe, "\" --merge-output-format ", videoFormat)
+                    ? string.Concat(sourceUrl, " -P ", outputDir, " -f \"bv*[height<=", videoResolution, "]+ba/b[height<=", videoResolution, "] / bv*+ba/b\" --ffmpeg-location \"", ffmpegExe, "\" --merge-output-format ", videoFormat)
                     : string.Concat(sourceUrl, " -P ", outputDir, " -x --audio-format ", audioFormat, " --ffmpeg-location ", ffmpegExe),
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
