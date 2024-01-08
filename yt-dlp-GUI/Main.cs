@@ -305,7 +305,7 @@ namespace yt_dlp_GUI
         // Handle download start and abort.
         private void ButtonStartDownload_Click(object sender, EventArgs e)
         {
-            string sourceUrl = textBoxSourceUrl.Text;
+            string sourceUrl = textBoxSourceUrl.Text.Replace("\r\n", " ");
             string outputDir = textBoxOutputDir.Text;
             string videoFormat = dropdownVideoFormat.Text;
             string videoResolution = dropdownVideoResolution.Text.TrimEnd('p');

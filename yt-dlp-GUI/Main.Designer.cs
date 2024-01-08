@@ -71,26 +71,28 @@
             // labelSourceUrl
             // 
             labelSourceUrl.AutoSize = true;
-            labelSourceUrl.Location = new Point(9, 57);
-            labelSourceUrl.Margin = new Padding(0);
+            labelSourceUrl.Location = new Point(9, 53);
+            labelSourceUrl.Margin = new Padding(0, 12, 0, 0);
             labelSourceUrl.Name = "labelSourceUrl";
-            labelSourceUrl.Size = new Size(69, 16);
+            labelSourceUrl.Size = new Size(74, 16);
             labelSourceUrl.TabIndex = 4;
-            labelSourceUrl.Text = "Source URL";
+            labelSourceUrl.Text = "Source URLs";
             // 
             // textBoxSourceUrl
             // 
-            textBoxSourceUrl.Location = new Point(12, 76);
+            textBoxSourceUrl.Location = new Point(12, 72);
+            textBoxSourceUrl.Multiline = true;
             textBoxSourceUrl.Name = "textBoxSourceUrl";
-            textBoxSourceUrl.Size = new Size(406, 23);
+            textBoxSourceUrl.ScrollBars = ScrollBars.Vertical;
+            textBoxSourceUrl.Size = new Size(406, 72);
             textBoxSourceUrl.TabIndex = 0;
             textBoxSourceUrl.Tag = "sourceUrl";
             // 
             // labelDownloadType
             // 
             labelDownloadType.AutoSize = true;
-            labelDownloadType.Location = new Point(9, 118);
-            labelDownloadType.Margin = new Padding(0);
+            labelDownloadType.Location = new Point(9, 159);
+            labelDownloadType.Margin = new Padding(0, 12, 0, 0);
             labelDownloadType.Name = "labelDownloadType";
             labelDownloadType.Size = new Size(89, 16);
             labelDownloadType.TabIndex = 6;
@@ -100,7 +102,7 @@
             // radioButtonVideo
             // 
             radioButtonVideo.AutoSize = true;
-            radioButtonVideo.Location = new Point(11, 138);
+            radioButtonVideo.Location = new Point(11, 180);
             radioButtonVideo.Name = "radioButtonVideo";
             radioButtonVideo.Size = new Size(57, 20);
             radioButtonVideo.TabIndex = 1;
@@ -111,7 +113,7 @@
             // radioButtonAudio
             // 
             radioButtonAudio.AutoSize = true;
-            radioButtonAudio.Location = new Point(74, 138);
+            radioButtonAudio.Location = new Point(74, 180);
             radioButtonAudio.Name = "radioButtonAudio";
             radioButtonAudio.Size = new Size(83, 20);
             radioButtonAudio.TabIndex = 2;
@@ -124,7 +126,7 @@
             dropdownVideoFormat.DropDownStyle = ComboBoxStyle.DropDownList;
             dropdownVideoFormat.FormattingEnabled = true;
             dropdownVideoFormat.Items.AddRange(new object[] { "mp4", "mkv", "webm", "mov", "avi", "flv" });
-            dropdownVideoFormat.Location = new Point(297, 137);
+            dropdownVideoFormat.Location = new Point(297, 178);
             dropdownVideoFormat.Name = "dropdownVideoFormat";
             dropdownVideoFormat.Size = new Size(121, 24);
             dropdownVideoFormat.TabIndex = 4;
@@ -136,7 +138,7 @@
             dropdownAudioFormat.DropDownStyle = ComboBoxStyle.DropDownList;
             dropdownAudioFormat.FormattingEnabled = true;
             dropdownAudioFormat.Items.AddRange(new object[] { "mp3", "wav", "flac", "aac", "alac", "m4a", "opus", "vorbis" });
-            dropdownAudioFormat.Location = new Point(297, 137);
+            dropdownAudioFormat.Location = new Point(297, 178);
             dropdownAudioFormat.Name = "dropdownAudioFormat";
             dropdownAudioFormat.Size = new Size(121, 24);
             dropdownAudioFormat.TabIndex = 4;
@@ -146,8 +148,8 @@
             // labelOutputDir
             // 
             labelOutputDir.AutoSize = true;
-            labelOutputDir.Location = new Point(9, 179);
-            labelOutputDir.Margin = new Padding(0);
+            labelOutputDir.Location = new Point(9, 215);
+            labelOutputDir.Margin = new Padding(0, 12, 0, 0);
             labelOutputDir.Name = "labelOutputDir";
             labelOutputDir.Size = new Size(96, 16);
             labelOutputDir.TabIndex = 11;
@@ -156,7 +158,7 @@
             // 
             // textBoxOutputDir
             // 
-            textBoxOutputDir.Location = new Point(12, 198);
+            textBoxOutputDir.Location = new Point(12, 234);
             textBoxOutputDir.Name = "textBoxOutputDir";
             textBoxOutputDir.Size = new Size(279, 23);
             textBoxOutputDir.TabIndex = 5;
@@ -164,9 +166,9 @@
             // 
             // buttonBrowse
             // 
-            buttonBrowse.Location = new Point(298, 196);
+            buttonBrowse.Location = new Point(296, 232);
             buttonBrowse.Name = "buttonBrowse";
-            buttonBrowse.Size = new Size(121, 27);
+            buttonBrowse.Size = new Size(123, 27);
             buttonBrowse.TabIndex = 6;
             buttonBrowse.Text = "Browse...";
             buttonBrowse.UseVisualStyleBackColor = true;
@@ -175,9 +177,10 @@
             // buttonStartDownload
             // 
             buttonStartDownload.Enabled = false;
-            buttonStartDownload.Location = new Point(12, 244);
+            buttonStartDownload.Location = new Point(11, 274);
+            buttonStartDownload.Margin = new Padding(3, 12, 3, 3);
             buttonStartDownload.Name = "buttonStartDownload";
-            buttonStartDownload.Size = new Size(406, 27);
+            buttonStartDownload.Size = new Size(408, 27);
             buttonStartDownload.TabIndex = 7;
             buttonStartDownload.Text = "Start download";
             buttonStartDownload.UseVisualStyleBackColor = true;
@@ -187,7 +190,8 @@
             // 
             textBoxConsoleOut.BorderStyle = BorderStyle.FixedSingle;
             textBoxConsoleOut.Font = new Font("Cascadia Mono", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBoxConsoleOut.Location = new Point(12, 277);
+            textBoxConsoleOut.Location = new Point(12, 307);
+            textBoxConsoleOut.Margin = new Padding(4, 3, 4, 3);
             textBoxConsoleOut.Name = "textBoxConsoleOut";
             textBoxConsoleOut.ReadOnly = true;
             textBoxConsoleOut.Size = new Size(406, 20);
@@ -199,7 +203,7 @@
             // 
             labelUpdateStatus.AutoSize = true;
             labelUpdateStatus.ForeColor = SystemColors.GrayText;
-            labelUpdateStatus.Location = new Point(8, 325);
+            labelUpdateStatus.Location = new Point(8, 354);
             labelUpdateStatus.Name = "labelUpdateStatus";
             labelUpdateStatus.Size = new Size(0, 16);
             labelUpdateStatus.TabIndex = 16;
@@ -207,7 +211,7 @@
             // buttonUpdate
             // 
             buttonUpdate.Font = new Font("Segoe Fluent Icons", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonUpdate.Location = new Point(392, 314);
+            buttonUpdate.Location = new Point(393, 344);
             buttonUpdate.Name = "buttonUpdate";
             buttonUpdate.Padding = new Padding(1, 1, 0, 0);
             buttonUpdate.Size = new Size(26, 26);
@@ -219,7 +223,7 @@
             // labelVideoFormat
             // 
             labelVideoFormat.AutoSize = true;
-            labelVideoFormat.Location = new Point(343, 118);
+            labelVideoFormat.Location = new Point(343, 159);
             labelVideoFormat.Margin = new Padding(0);
             labelVideoFormat.Name = "labelVideoFormat";
             labelVideoFormat.Size = new Size(78, 16);
@@ -230,7 +234,7 @@
             // labelAudioFormat
             // 
             labelAudioFormat.AutoSize = true;
-            labelAudioFormat.Location = new Point(343, 118);
+            labelAudioFormat.Location = new Point(343, 159);
             labelAudioFormat.Margin = new Padding(0);
             labelAudioFormat.Name = "labelAudioFormat";
             labelAudioFormat.Size = new Size(78, 16);
@@ -243,7 +247,7 @@
             dropdownVideoResolution.DropDownStyle = ComboBoxStyle.DropDownList;
             dropdownVideoResolution.FormattingEnabled = true;
             dropdownVideoResolution.Items.AddRange(new object[] { "2160p", "1440p", "1080p", "720p", "480p" });
-            dropdownVideoResolution.Location = new Point(170, 137);
+            dropdownVideoResolution.Location = new Point(170, 178);
             dropdownVideoResolution.Name = "dropdownVideoResolution";
             dropdownVideoResolution.Size = new Size(121, 24);
             dropdownVideoResolution.TabIndex = 3;
@@ -251,7 +255,7 @@
             // labelVideoResolution
             // 
             labelVideoResolution.AutoSize = true;
-            labelVideoResolution.Location = new Point(199, 118);
+            labelVideoResolution.Location = new Point(199, 159);
             labelVideoResolution.Margin = new Padding(0);
             labelVideoResolution.Name = "labelVideoResolution";
             labelVideoResolution.Size = new Size(96, 16);
@@ -261,7 +265,7 @@
             // 
             // buttonAbortDownload
             // 
-            buttonAbortDownload.Location = new Point(12, 244);
+            buttonAbortDownload.Location = new Point(12, 274);
             buttonAbortDownload.Name = "buttonAbortDownload";
             buttonAbortDownload.Size = new Size(406, 27);
             buttonAbortDownload.TabIndex = 21;
@@ -273,7 +277,7 @@
             // buttonAbout
             // 
             buttonAbout.Font = new Font("Segoe Fluent Icons", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonAbout.Location = new Point(387, 12);
+            buttonAbout.Location = new Point(388, 12);
             buttonAbout.Name = "buttonAbout";
             buttonAbout.Padding = new Padding(5, 4, 3, 3);
             buttonAbout.Size = new Size(31, 31);
@@ -286,7 +290,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(430, 352);
+            ClientSize = new Size(430, 382);
             Controls.Add(buttonAbout);
             Controls.Add(labelVideoResolution);
             Controls.Add(dropdownVideoResolution);
@@ -312,6 +316,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MinimumSize = new Size(446, 421);
             Name = "Main";
             Text = "yt-dlp GUI";
             FormClosing += Form1_FormClosing;
