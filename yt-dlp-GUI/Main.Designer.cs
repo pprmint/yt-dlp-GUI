@@ -125,7 +125,7 @@
             // 
             dropdownVideoFormat.DropDownStyle = ComboBoxStyle.DropDownList;
             dropdownVideoFormat.FormattingEnabled = true;
-            dropdownVideoFormat.Items.AddRange(new object[] { "mp4", "mkv", "webm", "mov", "avi", "flv" });
+            dropdownVideoFormat.Items.AddRange(new object[] { "mp4", "mkv", "mov", "avi", "flv" });
             dropdownVideoFormat.Location = new Point(297, 178);
             dropdownVideoFormat.Name = "dropdownVideoFormat";
             dropdownVideoFormat.Size = new Size(121, 24);
@@ -316,7 +316,6 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            MinimumSize = new Size(446, 421);
             Name = "Main";
             Text = "yt-dlp GUI";
             FormClosing += Form1_FormClosing;
