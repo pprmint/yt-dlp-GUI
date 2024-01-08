@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Contents of /deps for creating an installer
+Setup/utils/*.exe
+
+# Compiled installer
+Setup/Output/*.exe
