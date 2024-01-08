@@ -2,10 +2,10 @@
 
 [Setup]
 AppName=yt-dlp GUI
-AppVersion=1.1
+AppVersion=1.1.0
 AppCopyright=Copyright © 2024 pprmint.
 DefaultGroupName=yt-dlp GUI
-VersionInfoVersion=1.1.0.
+VersionInfoVersion=1.1.0
 WizardStyle=modern
 MinVersion=10.0.17763
 ArchitecturesAllowed=x64
@@ -28,8 +28,6 @@ Source: "utils\windowsdesktop-runtime-8.0.0-win-x64.exe";  DestDir: {tmp}; Flags
 Source: "{#BuildFiles}\yt-dlp-gui.exe"; DestDir: "{app}"
 Source: "{#BuildFiles}\yt-dlp-gui.dll"; DestDir: "{app}"
 Source: "{#BuildFiles}\yt-dlp-gui.runtimeconfig.json"; DestDir: "{app}"
-Source: "{#BuildFiles}\Microsoft.Windows.SDK.NET.dll"; DestDir: "{app}"
-Source: "{#BuildFiles}\WinRT.Runtime.dll"; DestDir: "{app}"
 Source: "utils\yt-dlp.exe"; DestDir: "{app}\utils"
 Source: "utils\ffmpeg.exe"; DestDir: "{app}\utils"
 Source: "utils\ffprobe.exe"; DestDir: "{app}\utils"

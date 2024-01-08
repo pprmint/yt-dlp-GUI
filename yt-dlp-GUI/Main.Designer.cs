@@ -265,9 +265,9 @@
             // 
             // buttonAbortDownload
             // 
-            buttonAbortDownload.Location = new Point(12, 274);
+            buttonAbortDownload.Location = new Point(11, 274);
             buttonAbortDownload.Name = "buttonAbortDownload";
-            buttonAbortDownload.Size = new Size(406, 27);
+            buttonAbortDownload.Size = new Size(408, 27);
             buttonAbortDownload.TabIndex = 21;
             buttonAbortDownload.Text = "Abort download";
             buttonAbortDownload.UseVisualStyleBackColor = true;
@@ -310,8 +310,8 @@
             Controls.Add(labelName);
             Controls.Add(dropdownAudioFormat);
             Controls.Add(labelAudioFormat);
-            Controls.Add(buttonStartDownload);
             Controls.Add(buttonAbortDownload);
+            Controls.Add(buttonStartDownload);
             Font = new Font("Segoe UI Variable Small", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
