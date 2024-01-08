@@ -10,6 +10,7 @@ WizardStyle=modern
 MinVersion=10.0.17763
 ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
+UninstallDisplayIcon={app}\yt-dlp-gui.exe
 Compression=lzma2
 SolidCompression=yes
 DefaultDirName={autopf}\pprmint\yt-dlp GUI
