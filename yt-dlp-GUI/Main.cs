@@ -8,6 +8,7 @@ namespace yt_dlp_GUI
     {
         // Required files and paths to run this.
         private readonly string utilsFolder = Path.Combine(Directory.GetCurrentDirectory(), "utils");
+        private readonly string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "temp");
         private readonly string ytdlpExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "yt-dlp.exe");
         private readonly string ffmpegExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "ffmpeg.exe");
         private readonly string ffprobeExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "ffprobe.exe");
@@ -318,8 +319,8 @@ namespace yt_dlp_GUI
             {
                 FileName = ytdlpExe,
                 Arguments = radioButtonVideo.Checked
-                    ? string.Concat(sourceUrl, " -P ", outputDir, " -f \"bv*[ext=", videoFormat, "][height<=", videoResolution, "]+ba[ext=m4a]/b\" --ffmpeg-location \"", ffmpegExe, "\" --remux-video ", videoFormat)
-                    : string.Concat(sourceUrl, " -P ", outputDir, " -x --audio-format ", audioFormat, " --ffmpeg-location \"", ffmpegExe, "\""),
+                    ? string.Concat(sourceUrl, " -P temp:\"", tempFolder, "\" -P home:\"", outputDir, "\" -f \"bv*[ext=", videoFormat, "][height<=", videoResolution, "]+ba[ext=m4a]/b\" --ffmpeg-location \"", ffmpegExe, "\" --remux-video ", videoFormat, " --windows-filenames")
+                    : string.Concat(sourceUrl, " -P temp:\"", tempFolder, "\" -P home:\"", outputDir, "\" -x --audio-format ", audioFormat, " --ffmpeg-location \"", ffmpegExe, "\" --windows-filenames"),
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
