@@ -3,6 +3,8 @@
 [Setup]
 AppName=yt-dlp GUI
 AppVersion=1.1.0
+AppPublisher=pprmint.
+AppPublisherURL=https://pprmint.art/
 AppCopyright=Copyright © 2024 pprmint.
 DefaultGroupName=yt-dlp GUI
 VersionInfoVersion=1.1.0
