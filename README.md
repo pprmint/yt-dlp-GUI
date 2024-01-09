@@ -7,10 +7,7 @@
 A _very_ simple Windows Forms app to use [yt-dlp](https://github.com/yt-dlp/yt-dlp) without touching a terminal.
 
 <p align="center">
-    <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="/assets/screenshot_dark.png">
-        <img width="500" alt="Screenshot of the UI." src="/assets/screenshot_light.png">
-    </picture>
+    <img width="432" alt="Screenshot of the UI." src="/assets/Screenshot_dark.svg">
 </p>
 
 ## Why "_very_" simple?
