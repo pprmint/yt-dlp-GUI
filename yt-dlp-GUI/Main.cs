@@ -29,6 +29,7 @@ namespace yt_dlp_GUI
             Random randomInt = new();
             labelName.Text = Greetings[randomInt.Next(Greetings.Length)];
         }
+
         private void SetActivity(string text)
         {
             labelName.Text = string.Concat(text);
@@ -109,11 +110,48 @@ namespace yt_dlp_GUI
             toolTipUpdate.SetToolTip(buttonUpdate, "Check for updates and install them if available.");
             toolTipAbout.SetToolTip(buttonAbout, "View version information and credits to libraries.");
 
-            // Set default values.
-            dropdownVideoFormat.SelectedIndex = 0;
-            dropdownVideoResolution.SelectedIndex = 2;
-            dropdownAudioFormat.SelectedIndex = 0;
-            radioButtonVideo.Checked = true;
+            // :::::::::::::::::::::::::::::: START
+            // Form field values from user settings
+            // Download type (video or audio).
+            if (UserSettings.Default.DownloadType == "audio")
+            {
+                radioButtonAudio.Checked = true;
+            }
+            else
+            {
+                radioButtonVideo.Checked = true;
+            }
+            // Video format.
+            if (UserSettings.Default.VideoFormatIndex < dropdownVideoFormat.Items.Count && UserSettings.Default.VideoFormatIndex >= 0)
+            {
+                dropdownVideoFormat.SelectedIndex = UserSettings.Default.VideoFormatIndex;
+            }
+            else
+            {
+                dropdownVideoFormat.SelectedIndex = 0; // mp4
+            };
+            // Video resolution.
+            if (UserSettings.Default.VideoResolutionIndex < dropdownVideoResolution.Items.Count && UserSettings.Default.VideoResolutionIndex >= 0)
+            {
+                dropdownVideoResolution.SelectedIndex = UserSettings.Default.VideoResolutionIndex;
+            }
+            else
+            {
+                dropdownVideoResolution.SelectedIndex = 2; // 1080p
+            };
+            // Audio format.
+            if (UserSettings.Default.AudioFormatIndex < dropdownAudioFormat.Items.Count && UserSettings.Default.AudioFormatIndex >= 0)
+            {
+                dropdownAudioFormat.SelectedIndex = UserSettings.Default.AudioFormatIndex;
+            }
+            else
+            {
+                dropdownAudioFormat.SelectedIndex = 0; // mp3
+            };
+
+            textBoxOutputDir.Text = UserSettings.Default.OutputDir;
+            // :::::::::::::::::::::::::::::::: END
+
             // Update the UI.
             ValidateFormatState();
 
@@ -418,9 +456,18 @@ namespace yt_dlp_GUI
             }
         }
 
-        // Checks for ongoing activity while trying to close the program.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Save user settings.
+            UserSettings.Default.DownloadType = (radioButtonVideo.Checked ? "video" : "audio");
+            UserSettings.Default.VideoFormatIndex = dropdownVideoFormat.SelectedIndex;
+            UserSettings.Default.VideoResolutionIndex = dropdownVideoResolution.SelectedIndex;
+            UserSettings.Default.AudioFormatIndex = dropdownAudioFormat.SelectedIndex;
+            UserSettings.Default.OutputDir = textBoxOutputDir.Text;
+            UserSettings.Default.Save();
+
+            // Checks for ongoing activity while trying to close the program.
+
             // Check if update is in progress.
             if (updateThread != null && updateThread.IsAlive)
             {

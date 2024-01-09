@@ -1,13 +1,14 @@
 #define BuildFiles "..\yt-dlp-GUI\bin\Release\net8.0-windows10.0.17763.0"
+#define Version "1.2.0"
 
 [Setup]
 AppName=yt-dlp GUI
-AppVersion=1.1.0
+AppVersion={#Version}
 AppPublisher=pprmint.
 AppPublisherURL=https://pprmint.art/
 AppCopyright=Copyright © 2024 pprmint.
 DefaultGroupName=yt-dlp GUI
-VersionInfoVersion=1.1.0
+VersionInfoVersion={#Version}
 WizardStyle=modern
 MinVersion=10.0.17763
 ArchitecturesAllowed=x64
