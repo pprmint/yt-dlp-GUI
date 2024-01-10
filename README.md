@@ -14,7 +14,7 @@ A _very_ simple Windows Forms app to use [yt-dlp](https://github.com/yt-dlp/yt-d
 
 If you direct your eyeballs towards the screenshot above you'll probably see why.
 
-Most of the time you probably don't need to fiddle with every little setting and flags that yt-dlp may offer. I know I don't. I'm writing this to be as simple as entering a video or playlist URL, selecting the format and hitting download. 
+Most of the time you probably don't want to fiddle with every little setting and flags that yt-dlp may offer. I know I don't. I'm writing this to be as simple as entering a video or playlist URL, selecting the desired format and hitting download. 
 
 Also, this is my first attempt at writing a C# app in almost a decade and I have basically no prior experience with it. Ctrl, C and V have been used extensively throughout this project.
 
