@@ -2,7 +2,7 @@
     <img height="120" alt="Project logo, which is a purple clapperboard with a play icon in the center." src="/assets/logo.png">
 </p>
 
-# yt-dlp GUI.
+# yt-dlp GUI. (work in progress)
 
 A _very_ simple Windows Forms app to use [yt-dlp](https://github.com/yt-dlp/yt-dlp) without touching a terminal.
 
