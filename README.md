@@ -1,5 +1,5 @@
 <p align="center">
-    <img height="120" alt="Project logo, which is a purple clapperboard with a play icon in the center." src="/assets/logo.png">
+    <img height="150" alt="Project logo, which is a purple clapperboard with a play icon in the center." src="/assets/logo.png">
 </p>
 
 # yt-dlp GUI. (work in progress)
