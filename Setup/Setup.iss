@@ -6,7 +6,7 @@ AppName=yt-dlp GUI
 AppVersion={#Version}
 AppPublisher=pprmint.
 AppPublisherURL=https://pprmint.art/
-AppCopyright=Copyright © 2024 pprmint.
+AppCopyright=Copyright Â© 2024 pprmint.
 DefaultGroupName=yt-dlp GUI
 VersionInfoVersion={#Version}
 WizardStyle=modern
@@ -35,6 +35,9 @@ Source: "{#BuildFiles}\yt-dlp-gui.runtimeconfig.json"; DestDir: "{app}"
 Source: "utils\yt-dlp.exe"; DestDir: "{app}\utils"
 Source: "utils\ffmpeg.exe"; DestDir: "{app}\utils"
 Source: "utils\ffprobe.exe"; DestDir: "{app}\utils"
+
+[Dirs]
+Name: "{app}\temp"; Permissions: users-modify
 
 [Code]
 function FrameworkIsNotInstalled: Boolean;
