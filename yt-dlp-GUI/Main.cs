@@ -7,11 +7,13 @@ namespace yt_dlp_GUI
     public partial class Main : Form
     {
         // Required files and paths to run this.
-        private readonly string utilsFolder = Path.Combine(Directory.GetCurrentDirectory(), "utils");
-        private readonly string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "temp");
-        private readonly string ytdlpExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "yt-dlp.exe");
-        private readonly string ffmpegExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "ffmpeg.exe");
-        private readonly string ffprobeExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "ffprobe.exe");
+        public readonly string utilsFolder = Path.Combine(Directory.GetCurrentDirectory(), "utils");
+        public readonly string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "temp");
+        public readonly string ytdlpExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "yt-dlp.exe");
+        public readonly string ffmpegExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "ffmpeg.exe");
+        public readonly string ffprobeExe = Path.Combine(Directory.GetCurrentDirectory(), "utils", "ffprobe.exe");
+
+        public static string ytdlpCommand = "";
 
         // Update and download threads.
         private Thread? versionThread;
@@ -83,6 +85,8 @@ namespace yt_dlp_GUI
             InitializeComponent();
 
             SetGreeting();
+
+            Text = string.Concat("yt-dlp GUI TEST v", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
 
             // Define default fonts.
             Font fontRegular = new("Segoe UI", 8);
@@ -351,14 +355,17 @@ namespace yt_dlp_GUI
             string audioFormat = dropdownAudioFormat.Text;
 
             SetActivity("Downloading...");
+
+            ytdlpCommand = radioButtonVideo.Checked
+                    ? string.Concat(sourceUrl, " -P temp:\"", tempFolder, "\" -P home:\"", outputDir, "\" -f \"bv*[ext=", videoFormat, "][height<=", videoResolution, "]+ba[ext=m4a]/b\" --ffmpeg-location \"", ffmpegExe, "\" --remux-video ", videoFormat, " --windows-filenames")
+                    : string.Concat(sourceUrl, " -P temp:\"", tempFolder, "\" -P home:\"", outputDir, "\" -x --audio-format ", audioFormat, " --ffmpeg-location \"", ffmpegExe, "\" --windows-filenames");
+
             Application.DoEvents();
 
             ProcessStartInfo downloadStartInfo = new()
             {
                 FileName = ytdlpExe,
-                Arguments = radioButtonVideo.Checked
-                    ? string.Concat(sourceUrl, " -P temp:\"", tempFolder, "\" -P home:\"", outputDir, "\" -f \"bv*[ext=", videoFormat, "][height<=", videoResolution, "]+ba[ext=m4a]/b\" --ffmpeg-location \"", ffmpegExe, "\" --remux-video ", videoFormat, " --windows-filenames")
-                    : string.Concat(sourceUrl, " -P temp:\"", tempFolder, "\" -P home:\"", outputDir, "\" -x --audio-format ", audioFormat, " --ffmpeg-location \"", ffmpegExe, "\" --windows-filenames"),
+                Arguments = ytdlpCommand,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
@@ -440,6 +447,9 @@ namespace yt_dlp_GUI
 
             downloadThread.Start();
         }
+
+        // Context menu to open troubleshooting window.
+
         // If true, current download will be aborted. Reset to false when new download starts.
         private bool AbortDownloadRequested = false;
         private void ButtonAbortDownload_Click(object sender, EventArgs e)
@@ -488,6 +498,14 @@ namespace yt_dlp_GUI
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void ViewCommandToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            {
+                Command commandWindow = new();
+                commandWindow.Show();
+            }
         }
     }
 

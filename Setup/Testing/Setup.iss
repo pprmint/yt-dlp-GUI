@@ -1,13 +1,13 @@
-#define BuildFiles "..\yt-dlp-GUI\bin\Release\net8.0-windows10.0.17763.0"
+#define BuildFiles "..\..\yt-dlp-GUI\bin\Release\net8.0-windows10.0.17763.0"
 #define Version "1.2.0"
 
 [Setup]
-AppName=yt-dlp GUI
+AppName=yt-dlp GUI TEST
 AppVersion={#Version}
 AppPublisher=pprmint.
 AppPublisherURL=https://pprmint.art/
 AppCopyright=Copyright © 2024 pprmint.
-DefaultGroupName=yt-dlp GUI
+DefaultGroupName=yt-dlp GUI TEST
 VersionInfoVersion={#Version}
 WizardStyle=modern
 MinVersion=10.0.17763
@@ -16,7 +16,7 @@ ArchitecturesInstallIn64BitMode=x64
 UninstallDisplayIcon={app}\yt-dlp-gui.exe
 Compression=lzma2
 SolidCompression=yes
-DefaultDirName={autopf}\pprmint\yt-dlp GUI
+DefaultDirName={autopf}\pprmint\yt-dlp GUI TEST
 LicenseFile=License.txt
 SetupIconFile=icon.ico
 WizardImageFile=wizardimage100.bmp,wizardimage125.bmp,wizardimage150.bmp,wizardimage175.bmp,wizardimage200.bmp,wizardimage225.bmp,wizardimage250.bmp
@@ -28,13 +28,16 @@ Name: desktopIcon; Description: "Desktop icon"; GroupDescription: "Additional ic
 Name: startMenuIcon; Description: "Start Menu icon"; GroupDescription: "Additional icons:"
 
 [Files]
-Source: "utils\windowsdesktop-runtime-8.0.0-win-x64.exe";  DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
-Source: "{#BuildFiles}\yt-dlp-gui.exe"; DestDir: "{app}"
-Source: "{#BuildFiles}\yt-dlp-gui.dll"; DestDir: "{app}"
-Source: "{#BuildFiles}\yt-dlp-gui.runtimeconfig.json"; DestDir: "{app}"
-Source: "utils\yt-dlp.exe"; DestDir: "{app}\utils"
-Source: "utils\ffmpeg.exe"; DestDir: "{app}\utils"
-Source: "utils\ffprobe.exe"; DestDir: "{app}\utils"
+Source: "..\utils\windowsdesktop-runtime-8.0.0-win-x64.exe";  DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
+Source: "{#BuildFiles}\yt-dlp-gui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildFiles}\yt-dlp-gui.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildFiles}\yt-dlp-gui.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\utils\yt-dlp.exe"; DestDir: "{app}\utils"; Flags: ignoreversion
+Source: "..\utils\ffmpeg.exe"; DestDir: "{app}\utils"; Flags: ignoreversion
+Source: "..\utils\ffprobe.exe"; DestDir: "{app}\utils"; Flags: ignoreversion
+
+[Dirs]
+Name: "{app}\temp"; Permissions: users-modify
 
 [Code]
 function FrameworkIsNotInstalled: Boolean;
@@ -73,5 +76,5 @@ begin
 end;
 
 [Icons]
-Name: "{commondesktop}\yt-dlp GUI"; Filename: "{app}\yt-dlp-gui.exe"; Comment: "Download video and audio using yt-dlp."; Tasks: desktopIcon
-Name: "{commonstartmenu}\yt-dlp GUI"; Filename: "{app}\yt-dlp-gui.exe"; Comment: "Download video and audio using yt-dlp."; Tasks: startMenuIcon
+Name: "{commondesktop}\yt-dlp GUI TEST"; Filename: "{app}\yt-dlp-gui.exe"; Comment: "Download video and audio using yt-dlp."; Tasks: desktopIcon
+Name: "{commonstartmenu}\yt-dlp GUI TEST"; Filename: "{app}\yt-dlp-gui.exe"; Comment: "Download video and audio using yt-dlp."; Tasks: startMenuIcon

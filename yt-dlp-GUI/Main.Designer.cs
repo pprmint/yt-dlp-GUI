@@ -42,6 +42,8 @@
             textBoxOutputDir = new TextBox();
             buttonBrowse = new Button();
             buttonStartDownload = new Button();
+            contextMenuTroubleshoot = new ContextMenuStrip(components);
+            viewCommandToolStripMenuItem = new ToolStripMenuItem();
             folderBrowserDialog = new FolderBrowserDialog();
             textBoxConsoleOut = new TextBox();
             labelUpdateStatus = new Label();
@@ -55,6 +57,7 @@
             buttonAbortDownload = new Button();
             buttonAbout = new Button();
             toolTipAbout = new ToolTip(components);
+            contextMenuTroubleshoot.SuspendLayout();
             SuspendLayout();
             // 
             // labelName
@@ -176,6 +179,7 @@
             // 
             // buttonStartDownload
             // 
+            buttonStartDownload.ContextMenuStrip = contextMenuTroubleshoot;
             buttonStartDownload.Enabled = false;
             buttonStartDownload.Location = new Point(11, 274);
             buttonStartDownload.Margin = new Padding(3, 12, 3, 3);
@@ -185,6 +189,19 @@
             buttonStartDownload.Text = "Start download";
             buttonStartDownload.UseVisualStyleBackColor = true;
             buttonStartDownload.Click += ButtonStartDownload_Click;
+            // 
+            // contextMenuTroubleshoot
+            // 
+            contextMenuTroubleshoot.Items.AddRange(new ToolStripItem[] { viewCommandToolStripMenuItem });
+            contextMenuTroubleshoot.Name = "contextMenuStrip1";
+            contextMenuTroubleshoot.Size = new Size(158, 26);
+            // 
+            // viewCommandToolStripMenuItem
+            // 
+            viewCommandToolStripMenuItem.Name = "viewCommandToolStripMenuItem";
+            viewCommandToolStripMenuItem.Size = new Size(157, 22);
+            viewCommandToolStripMenuItem.Text = "View command";
+            viewCommandToolStripMenuItem.Click += ViewCommandToolStripMenuItem_Click;
             // 
             // textBoxConsoleOut
             // 
@@ -265,6 +282,7 @@
             // 
             // buttonAbortDownload
             // 
+            buttonAbortDownload.ContextMenuStrip = contextMenuTroubleshoot;
             buttonAbortDownload.Location = new Point(11, 274);
             buttonAbortDownload.Name = "buttonAbortDownload";
             buttonAbortDownload.Size = new Size(408, 27);
@@ -317,9 +335,11 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Main";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "yt-dlp GUI";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
+            contextMenuTroubleshoot.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -351,5 +371,7 @@
         private Button buttonAbortDownload;
         private Button buttonAbout;
         private ToolTip toolTipAbout;
+        private ContextMenuStrip contextMenuTroubleshoot;
+        private ToolStripMenuItem viewCommandToolStripMenuItem;
     }
 }
