@@ -207,15 +207,14 @@ namespace yt_dlp_GUI
         private void InstallUpdates()
         {
             labelUpdateStatus.Text = "Checking for updates...";
-            SetActivity("Updating...");
             Application.DoEvents();
 
             ProcessStartInfo updateStartInfo = new()
             {
                 FileName = ytdlpExe,
                 Arguments = "-U",
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
+                UseShellExecute = true,
+                Verb = "runas",
                 CreateNoWindow = true,
             };
 
@@ -224,30 +223,53 @@ namespace yt_dlp_GUI
                 try
                 {
                     updateProcess = new Process { StartInfo = updateStartInfo };
-                    updateProcess.Start();
 
-                    using (StreamReader reader = updateProcess.StandardOutput)
+                    // If UAC prompt is confirmed.
+                    bool processStarted = false;
+                    try
                     {
-                        while (!reader.EndOfStream)
+                        updateProcess.Start();
+                        processStarted = true;
+                        updateProcess.WaitForExit();
+                    }
+                    // If UAC is denied.
+                    catch (System.ComponentModel.Win32Exception ex)
+                    {
+                        if (ex.NativeErrorCode == 1223)
                         {
-                            var line = reader.ReadLine();
-                            labelUpdateStatus.Invoke((Action)(() => labelUpdateStatus.Text = line.Truncate(59)));
-                            Application.DoEvents();
+                            Invoke(() =>
+                            {
+                                labelUpdateStatus.Text = "Update canceled.";
+                            });
                         }
                     }
+                    finally
+                    {
+                        Invoke(() =>
+                        {
+                            // Make sure update process gets killed at the end, if it ran.
+                            if (processStarted && !updateProcess.HasExited)
+                            {
+                                updateProcess.Kill();
+                            }
 
-                    updateProcess.WaitForExit();
+                            // Enable controls again.
+                            buttonUpdate.Enabled = true;
+                            ValidateDownloadButtonState();
+
+                            Cursor = Cursors.Default;
+                            // Replace the updating... text with new version.
+                            GetVersion();
+                        });
+                    }
                 }
-                finally
+                catch (Exception ex)
                 {
+                    // Exception handling for other errors.
                     Invoke(() =>
                     {
-                        if (updateProcess != null && !updateProcess.HasExited)
-                        {
-                            updateProcess.Kill();
-                        }
-
-                        SetActivity("Update complete.");
+                        labelUpdateStatus.Text = "An error occurred.";
+                        MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Something went wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         // Enable controls again.
                         buttonUpdate.Enabled = true;
@@ -257,12 +279,6 @@ namespace yt_dlp_GUI
                     });
                 }
             });
-
-            // Disable controls.
-            buttonStartDownload.Enabled = false;
-            buttonUpdate.Enabled = false;
-
-            Cursor = Cursors.WaitCursor;
 
             updateThread.Start();
         }

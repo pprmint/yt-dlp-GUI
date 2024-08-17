@@ -18,11 +18,11 @@
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <SignAssembly>False</SignAssembly>
-    <PackageProjectUrl>https://pprmint.art/yt-dlp-gui</PackageProjectUrl>
+    <PackageProjectUrl>https://pprmint.de/yt-dlp-gui</PackageProjectUrl>
     <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
     <Copyright>Copyright © 2024 pprmint.</Copyright>
-    <AssemblyVersion>1.2.0</AssemblyVersion>
-    <FileVersion>1.2.0</FileVersion>
+    <AssemblyVersion>1.2.1</AssemblyVersion>
+    <FileVersion>1.2.1</FileVersion>
     <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
 

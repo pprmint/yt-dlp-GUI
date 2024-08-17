@@ -61,9 +61,9 @@
             pictureBoxFooter.Cursor = Cursors.Hand;
             pictureBoxFooter.ErrorImage = null;
             pictureBoxFooter.Image = (Image)resources.GetObject("pictureBoxFooter.Image");
-            pictureBoxFooter.Location = new Point(12, 313);
+            pictureBoxFooter.Location = new Point(275, 298);
             pictureBoxFooter.Name = "pictureBoxFooter";
-            pictureBoxFooter.Size = new Size(406, 50);
+            pictureBoxFooter.Size = new Size(143, 43);
             pictureBoxFooter.TabIndex = 0;
             pictureBoxFooter.TabStop = false;
             pictureBoxFooter.Click += PictureBoxFooter_Click;
@@ -244,7 +244,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(430, 375);
+            ClientSize = new Size(430, 353);
             Controls.Add(linkLabelProjectWebsite);
             Controls.Add(linkLabelFfmpegWebsite);
             Controls.Add(linkLabelFfmpegGithub);

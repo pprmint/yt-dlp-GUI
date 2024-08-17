@@ -1,11 +1,11 @@
 #define BuildFiles "..\yt-dlp-GUI\bin\Release\net8.0-windows10.0.17763.0"
-#define Version "1.2.0"
+#define Version "1.2.1"
 
 [Setup]
 AppName=yt-dlp GUI
 AppVersion={#Version}
 AppPublisher=pprmint.
-AppPublisherURL=https://pprmint.art/
+AppPublisherURL=https://pprmint.de/
 AppCopyright=Copyright © 2024 pprmint.
 DefaultGroupName=yt-dlp GUI
 VersionInfoVersion={#Version}
@@ -28,7 +28,7 @@ Name: desktopIcon; Description: "Desktop icon"; GroupDescription: "Additional ic
 Name: startMenuIcon; Description: "Start Menu icon"; GroupDescription: "Additional icons:"
 
 [Files]
-Source: "utils\windowsdesktop-runtime-8.0.0-win-x64.exe";  DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
+Source: "utils\windowsdesktop-runtime-8.0.8-win-x64.exe";  DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
 Source: "{#BuildFiles}\yt-dlp-gui.exe"; DestDir: "{app}"
 Source: "{#BuildFiles}\yt-dlp-gui.dll"; DestDir: "{app}"
 Source: "{#BuildFiles}\yt-dlp-gui.runtimeconfig.json"; DestDir: "{app}"
@@ -51,7 +51,7 @@ begin
     if not RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost', 'Version', Version) then
       Result := True
     else
-      Result := Version <> '8.0.0';
+      Result := Version <> '8.0.8';
   end;
 end;
 
@@ -64,7 +64,7 @@ begin
   WizardForm.StatusLabel.Caption := 'Installing .NET framework...';
   WizardForm.ProgressGauge.Style := npbstMarquee;
   try
-    if not Exec(ExpandConstant('{tmp}\windowsdesktop-runtime-8.0.0-win-x64.exe'), '/q /norestart', '', SW_SHOW, ewWaitUntilTerminated, ResultCode) then
+    if not Exec(ExpandConstant('{tmp}\windowsdesktop-runtime-8.0.8-win-x64.exe'), '/q /norestart', '', SW_SHOW, ewWaitUntilTerminated, ResultCode) then
     begin
       MsgBox('.NET installation failed with code: ' + IntToStr(ResultCode) + '.',
       mbError, MB_OK);

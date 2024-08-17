@@ -10,8 +10,8 @@ namespace yt_dlp_GUI
 
             // Set tooltips.
             toolTipGithub.SetToolTip(linkLabelGithub, "https://github.com/pprmint/yt-dlp-GUI");
-            toolTipProjectWebsite.SetToolTip(linkLabelProjectWebsite, "https://pprmint.art/yt-dlp-gui");
-            toolTipWebsite.SetToolTip(pictureBoxFooter, "https://pprmint.art");
+            toolTipProjectWebsite.SetToolTip(linkLabelProjectWebsite, "https://pprmint.de/yt-dlp-gui");
+            toolTipWebsite.SetToolTip(pictureBoxFooter, "https://pprmint.de");
             // yt-dlp.
             toolTipYtdlpGithub.SetToolTip(linkLabelYtdlpGithub, "https://github.com/yt-dlp/yt-dlp");
             toolTipYtdlpDiscord.SetToolTip(linkLabelYtdlpDiscord, "https://discord.gg/H5MNcFW63r");
@@ -46,7 +46,7 @@ namespace yt_dlp_GUI
         {
             ProcessStartInfo websiteUrl = new()
             {
-                FileName = "https://pprmint.art",
+                FileName = "https://pprmint.de",
                 UseShellExecute = true
             };
             Process.Start(websiteUrl);
@@ -66,7 +66,7 @@ namespace yt_dlp_GUI
         {
             ProcessStartInfo websiteUrl = new()
             {
-                FileName = "https://pprmint.art/yt-dlp-gui",
+                FileName = "https://pprmint.de/yt-dlp-gui",
                 UseShellExecute = true
             };
             Process.Start(websiteUrl);
